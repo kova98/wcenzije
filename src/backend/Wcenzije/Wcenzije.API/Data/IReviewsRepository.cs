@@ -1,4 +1,4 @@
-﻿using Wcenzije.API.Models;
+﻿using Wcenzije.API.Entities;
 
 namespace Wcenzije.API.Data
 {

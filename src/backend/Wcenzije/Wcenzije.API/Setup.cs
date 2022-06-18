@@ -21,6 +21,11 @@ namespace Wcenzije.API
         {
             var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
+            if (connUrl == null)
+            {
+                throw new Exception("Environment variable DATABASE_URL not found.");
+            }
+
             connUrl = connUrl.Replace("postgres://", string.Empty);
             var pgUserPass = connUrl.Split("@")[0];
             var pgHostPortDb = connUrl.Split("@")[1];
@@ -45,6 +50,7 @@ namespace Wcenzije.API
                 Console.WriteLine("WARNING: dbContext is null! Cannot migrate database.");
             }
             dbContext?.Database.Migrate();
+
             return app;
         }
     }

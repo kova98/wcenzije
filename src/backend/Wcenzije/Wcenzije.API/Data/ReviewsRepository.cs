@@ -13,6 +13,7 @@ namespace Wcenzije.API.Data
 
         public void CreateReview(Review review)
         {
+            review.Id = 0;
             _context.Reviews.Add(review);
             _context.SaveChanges();
         }
@@ -35,7 +36,11 @@ namespace Wcenzije.API.Data
 
         public void UpdateReview(Review review)
         {
-            _context.Reviews.Update(review);
+            var reviewToUpdate = _context.Reviews.Find(review.Id);
+            reviewToUpdate.ImageUrls = review.ImageUrls;
+            reviewToUpdate.Content = review.Content;
+            reviewToUpdate.LikeCount = review.LikeCount;
+
             _context.SaveChanges();
         }
     }

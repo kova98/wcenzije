@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:wcenzije/models/review.dart';
+import 'package:wcenzije/services/reviews_repo.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
 
-  final List<String> reviews = const [
-    "review 1",
-    "some review 2",
-    "another review 3",
-    "another review 4",
-    "one more 5",
-  ];
+  final repo = ReviewsRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +14,24 @@ class HomeScreen extends StatelessWidget {
         title: const Text("Wcenzije"),
       ),
       backgroundColor: Colors.white,
-      body: ListView.builder(
-        padding: const EdgeInsets.all(8),
-        itemCount: reviews.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            onTap: () {},
-            title: Text(reviews[index]),
-          );
-        },
-      ),
+      body: FutureBuilder<List<Review>>(
+          future: repo.getReviews(),
+          builder: (context, snapshot) {
+            return snapshot.hasData
+                ? ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: snapshot.data?.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        onTap: () {},
+                        title: Text(snapshot.data![index].id.toString()),
+                      );
+                    },
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  );
+          }),
     );
   }
 }

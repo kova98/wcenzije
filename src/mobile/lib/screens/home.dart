@@ -15,23 +15,24 @@ class HomeScreen extends StatelessWidget {
       ),
       backgroundColor: Colors.white,
       body: FutureBuilder<List<Review>>(
-          future: repo.getReviews(),
-          builder: (context, snapshot) {
-            return snapshot.hasData
-                ? ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: snapshot.data?.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        onTap: () {},
-                        title: Text(snapshot.data![index].id.toString()),
-                      );
-                    },
-                  )
-                : const Center(
-                    child: CircularProgressIndicator(),
-                  );
-          }),
+        future: repo.getReviews(),
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: snapshot.data?.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {},
+                      title: Text(snapshot.data![index].id.toString()),
+                    );
+                  },
+                )
+              : const Center(
+                  child: CircularProgressIndicator(),
+                );
+        },
+      ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:wcenzije/screens/home.dart';
+import 'package:wcenzije/screens/map.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
@@ -18,7 +19,7 @@ class App extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       title: 'Wcenzije',
-      home: HomeScreen(),
+      home: MapScreen(),
     );
   }
 }

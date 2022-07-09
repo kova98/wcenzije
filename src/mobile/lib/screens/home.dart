@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wcenzije/models/review.dart';
+import 'package:wcenzije/widgets/map.dart';
 import 'package:wcenzije/services/reviews_repo.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -10,26 +11,16 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Wcenzije"),
-      ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.blue,
       body: FutureBuilder<List<Review>>(
         future: repo.getReviews(),
         builder: (context, snapshot) {
           return snapshot.hasData
-              ? ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: snapshot.data?.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      onTap: () {},
-                      title: Text(snapshot.data![index].id.toString()),
-                    );
-                  },
-                )
+              ? Map(snapshot.data)
               : const Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
                 );
         },
       ),

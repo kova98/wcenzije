@@ -40,6 +40,9 @@ namespace Wcenzije.API.Data
             reviewToUpdate.ImageUrls = review.ImageUrls;
             reviewToUpdate.Content = review.Content;
             reviewToUpdate.LikeCount = review.LikeCount;
+            reviewToUpdate.Name = review.Name;
+            reviewToUpdate.Location = review.Location;
+            reviewToUpdate.Rating = review.Rating;
 
             _context.SaveChanges();
         }

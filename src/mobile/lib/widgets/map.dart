@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wcenzije/models/review.dart';
+import 'package:wcenzije/screens/review.dart';
 
 import '../helpers/assets_helper.dart';
 import '../helpers/google_maps_helper.dart';
@@ -43,22 +44,26 @@ class _MapState extends State<Map> {
           GoogleMapsHelper.changeMapMode(c, "assets/maps_style.json");
         },
         myLocationButtonEnabled: false,
-        zoomControlsEnabled: true,
+        zoomControlsEnabled: false,
         initialCameraPosition: _initialCameraPosition,
-        markers: _getMarkers(),
+        markers: _getMarkers(context),
       ),
     );
   }
 
-  Set<Marker> _getMarkers() {
+  Set<Marker> _getMarkers(BuildContext context) {
     var markers = widget.reviews
-        ?.where((element) => element.location.isNotEmpty)
+        ?.where((review) => review.location.isNotEmpty)
         .map(
-          (e) => Marker(
-            markerId: MarkerId(e.id.toString()),
-            infoWindow: InfoWindow(title: _getTitle(e)),
+          (review) => Marker(
+            markerId: MarkerId(review.id.toString()),
+            infoWindow: InfoWindow(title: _getTitle(review)),
             icon: icon,
-            position: _getPosition(e.location),
+            position: _getPosition(review.location),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ReviewScreen(review)),
+            ),
           ),
         )
         .toSet();

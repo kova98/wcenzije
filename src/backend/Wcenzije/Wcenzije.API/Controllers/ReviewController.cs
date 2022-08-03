@@ -31,7 +31,7 @@ namespace Wcenzije.API.Controllers
         {
             _reviewsRepo.CreateReview(review);
 
-            return CreatedAtAction(nameof(GetReview), review);
+            return CreatedAtAction(nameof(GetReview), new { Id = review.Id}, review);
         }
 
         [HttpPut]

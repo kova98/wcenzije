@@ -3,6 +3,8 @@ import lzma
 from os import listdir
 from os.path import isfile, join
 import re
+from os import path
+from imgur_python import Imgur
 
 path = '.'
 
@@ -13,6 +15,9 @@ def main():
     folders.sort(reverse=True)
     folders.pop()
 
+    id = input('Imgur Client ID:')
+    secret = input('Imgur Client Secret:')
+
     for folder in folders:
         folder_path = join(path, folder)
                 
@@ -21,7 +26,9 @@ def main():
         rating = extract_rating(content)
         like_count = extract_like_count(post_info)
         name, lat, lng = extract_location(post_info)
-        image_urls = upload_images(folder_path)
+        image_urls = upload_images(folder_path, id, secret)
+
+        print(image_urls)
 
 def extract_content(post_info):
     return post_info['node']['edge_media_to_caption']['edges'][0]['node']['text']
@@ -54,12 +61,17 @@ def extract_post_info(folder_path):
         stri = json_bytes.decode('utf-8')
         return json.loads(stri)
 
-def upload_images(folder_path):
+def upload_images(folder_path, id, secret):
     files = [f for f in listdir(folder_path) if isfile(join(folder_path, f))]
-    images = [join(folder_path, f) for f in files if f.endswith('.jpg')]
-    
-    # TODO: actually upload images and return the urls
-    return images
+    image_paths = [join(folder_path, f) for f in files if f.endswith('.jpg')]
+    imgur_client = Imgur({'client_id': id, 'access_token': secret})
+    image_urls = []
 
+    for path in image_paths:
+        response = imgur_client.image_upload(path, 'Untitled', 'Wcenzije test')
+        image_url = response['response']['data']['link']
+        image_urls.append(image_url)
+
+    return image_urls
 
 main()

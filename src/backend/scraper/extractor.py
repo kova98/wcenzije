@@ -40,7 +40,7 @@ def main():
             "name": name,
             "content": content,
             "rating": rating,
-            "like_count": like_count,
+            "likeCount": like_count,
             "location": f"{lat},{lng}",
             "imageUrls": image_urls
         }

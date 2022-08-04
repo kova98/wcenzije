@@ -20,12 +20,18 @@ def main():
     secret = input('Imgur Client Secret:')
 
     posts_path = join(path, "posts")
+    existing_posts = listdir(posts_path)
 
     current = 0
 
     for folder in folders:
         current = current + 1
-        print(f'Extracting folder {current} of {folders.count}')
+        
+        if f"{folder}.json" in existing_posts:
+            print(f'Skipping folder {folder} because post already exists.')
+            continue
+
+        print(f'Extracting folder {current} of {len(folders)}')
 
         folder_path = join(path, folder)  
         post_info = extract_post_info(folder_path)
@@ -63,7 +69,11 @@ def extract_location(post_info):
 
         return (name, lat, lng)
     except:
-        return ('location unavailable', '', '')
+        try:
+            name = post_info['node']['location']['name']
+            return (name, '', '')
+        except:
+            return ('location unavailable', '', '')
 
 def extract_like_count(post_info):
     return post_info['node']['edge_media_preview_like']['count']

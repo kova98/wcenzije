@@ -5,6 +5,7 @@ import 'package:wcenzije/screens/review.dart';
 
 import '../helpers/assets_helper.dart';
 import '../helpers/google_maps_helper.dart';
+import '../screens/add_review/where.dart';
 
 class Map extends StatefulWidget {
   final List<Review>? reviews;
@@ -47,6 +48,14 @@ class _MapState extends State<Map> {
         zoomControlsEnabled: false,
         initialCameraPosition: _initialCameraPosition,
         markers: _getMarkers(context),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddReviewWhereScreen()),
+        ),
       ),
     );
   }

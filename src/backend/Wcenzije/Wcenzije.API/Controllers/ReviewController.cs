@@ -16,8 +16,10 @@ namespace Wcenzije.API.Controllers
         }
 
         [HttpGet]
-        public List<Review> GetReviews() => _reviewsRepo.GetReviews();
-
+        public List<Review> GetReviews() => _reviewsRepo
+            .GetReviews()
+            .Where(LocationIsValid)
+            .ToList();
 
         [HttpGet("{id}", Name = nameof(GetReview))]
         public IActionResult GetReview(long id)
@@ -57,6 +59,20 @@ namespace Wcenzije.API.Controllers
             _reviewsRepo.DeleteReview(id);
 
             return Ok();
+        }
+
+        private bool LocationIsValid(Review arg)
+        {
+            if (string.IsNullOrEmpty(arg.Location)) return false;   
+
+            var locationStrings = arg.Location.Split(',');
+
+            if (locationStrings.Length != 2) return false;
+            
+            var latValid = double.TryParse(locationStrings[0], out _);
+            var lngValid = double.TryParse(locationStrings[1], out _);
+
+            return latValid && lngValid;
         }
     }
 }

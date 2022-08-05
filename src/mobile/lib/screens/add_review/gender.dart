@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import 'content.dart';
+
 class AddReviewGenderScreen extends StatefulWidget {
   final String name;
   const AddReviewGenderScreen(this.name, {Key? key}) : super(key: key);
@@ -25,7 +27,7 @@ class _AddReviewGenderScreenState extends State<AddReviewGenderScreen> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Colors.blue, textStyle: TextStyle(fontSize: 12)),
-                  onPressed: () => {},
+                  onPressed: () => pushContentScreen(context, "male"),
                   child: const Icon(
                     Icons.male,
                     size: 200,
@@ -40,7 +42,7 @@ class _AddReviewGenderScreenState extends State<AddReviewGenderScreen> {
                     primary: Colors.pink,
                     textStyle: TextStyle(fontSize: 12),
                   ),
-                  onPressed: () => {},
+                  onPressed: () => pushContentScreen(context, "female"),
                   child: const Icon(
                     Icons.female,
                     size: 200,
@@ -54,4 +56,11 @@ class _AddReviewGenderScreenState extends State<AddReviewGenderScreen> {
       ),
     );
   }
+
+  pushContentScreen(context, gender) => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AddReviewContentScreen(gender, widget.name),
+        ),
+      );
 }

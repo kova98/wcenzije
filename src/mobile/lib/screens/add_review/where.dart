@@ -9,6 +9,7 @@ class AddReviewWhereScreen extends StatefulWidget {
 
 class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
   late GooglePlace googlePlace;
+  // TODO: Initialize with nearby places
   List<AutocompletePrediction> predictions = [];
 
   @override
@@ -33,7 +34,10 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
                 padding: EdgeInsets.only(top: 60, bottom: 30),
                 child: Text(
                   'Gdje?',
-                  style: TextStyle(color: Colors.white, fontSize: 32),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               Material(

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -26,6 +27,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
   bool isClean = false;
   bool hasPaperTowel = false;
   List<XFile> images = [];
+  double rating = 2.5;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,9 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
               children: [
                 const Padding(padding: EdgeInsets.all(16)),
                 title(),
-                const Padding(padding: EdgeInsets.all(16)),
+                const Padding(padding: EdgeInsets.all(8)),
+                ratingBar(),
+                const Padding(padding: EdgeInsets.all(8)),
                 necessities(),
                 const Padding(padding: EdgeInsets.all(8)),
                 contentTextField(),
@@ -95,11 +99,17 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     );
   }
 
-  Text title() {
-    return Text(
-      widget.name,
-      style: const TextStyle(
-          color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
+  Widget title() {
+    return Center(
+      child: Text(
+        widget.name,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 
@@ -258,5 +268,45 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     return images.length > 0
         ? [const Spacer(), Text(text), const Spacer()]
         : [const Spacer()];
+  }
+
+  Widget ratingBar() {
+    return Center(
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(30),
+        // elevation: 2,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              RatingBar.builder(
+                glowColor: Colors.amber,
+                initialRating: rating,
+                minRating: 0,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => Icon(
+                  Icons.star,
+                  color: Colors.white,
+                ),
+                onRatingUpdate: (r) {
+                  setState(() {
+                    rating = r;
+                  });
+                },
+              ),
+              Padding(padding: EdgeInsets.all(4)),
+              Text(
+                'Tvoja ocjena: ${(rating * 2).round()}/10',
+                style: whiteText(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

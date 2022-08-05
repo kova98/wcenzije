@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_place/google_place.dart';
+import 'package:wcenzije/screens/add_review/gender.dart';
 
 class AddReviewWhereScreen extends StatefulWidget {
   @override
@@ -86,7 +87,15 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onTap: () {
-                        debugPrint(predictions[index].id);
+                        final name =
+                            predictions[index].description?.split(',').first ??
+                                'error';
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddReviewGenderScreen(name),
+                          ),
+                        );
                       },
                     );
                   },

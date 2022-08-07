@@ -7,8 +7,14 @@ class Review {
   final String location;
   final String name;
 
-  Review(this.id, this.imageUrls, this.content, this.likeCount, this.location,
-      this.name, this.rating);
+  Review(
+      {required this.id,
+      required this.imageUrls,
+      required this.content,
+      required this.likeCount,
+      required this.location,
+      required this.name,
+      required this.rating});
 
   Review.fromJson(Map<String, dynamic> parsedJson)
       : id = parsedJson['id'],
@@ -28,4 +34,6 @@ class Review {
         "name": name,
         "rating": rating
       };
+
+  static formatLocation(double lat, double lng) => "$lat,$lng";
 }

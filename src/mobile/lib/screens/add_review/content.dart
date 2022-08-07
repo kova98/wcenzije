@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:wcenzije/models/review.dart';
+import 'package:wcenzije/services/reviews_repo.dart';
 
 class AddReviewContentScreen extends StatefulWidget {
   final String gender;
@@ -22,12 +24,15 @@ class AddReviewContentScreen extends StatefulWidget {
 }
 
 class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
+  final repo = ReviewsRepository();
+
+  String contentText = '';
+  double rating = 2.5;
   bool hasToiletPaper = false;
   bool hasSoap = false;
   bool isClean = false;
   bool hasPaperTowel = false;
   List<XFile> images = [];
-  double rating = 2.5;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +52,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
                 const Padding(padding: EdgeInsets.all(8)),
                 ratingBar(),
                 const Padding(padding: EdgeInsets.all(8)),
-                necessities(),
+                qualities(),
                 const Padding(padding: EdgeInsets.all(8)),
                 contentTextField(),
                 const Padding(padding: EdgeInsets.all(8)),
@@ -85,6 +90,8 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
         child: TextFormField(
+          initialValue: contentText,
+          onChanged: (value) => contentText = value,
           minLines: 1,
           maxLines: 5,
           // The validator receives the text that the user has entered.
@@ -118,10 +125,22 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: ElevatedButton(
         onPressed: () {
+          print('submit button pressed');
           if (_formKey.currentState!.validate()) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Processing Data')),
+            double lat = 45.80895723907695;
+            double lng = 15.97063830900707;
+
+            final review = Review(
+              id: 0,
+              likeCount: 0,
+              imageUrls: [],
+              name: widget.name,
+              content: contentText,
+              location: Review.formatLocation(lat, lng),
+              rating: (rating * 2).round(),
             );
+
+            repo.createReview(review, images);
           }
         },
         child: Text(
@@ -135,7 +154,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     );
   }
 
-  Widget necessity(icon, value, positiveMsg, negativeMsg, updateCallback) {
+  Widget quality(icon, value, positiveMsg, negativeMsg, updateCallback) {
     return Row(
       children: [
         Switch(
@@ -164,7 +183,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     );
   }
 
-  Widget necessities() {
+  Widget qualities() {
     return Card(
       color: Colors.white,
       child: Padding(
@@ -172,28 +191,28 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            necessity(
+            quality(
               FontAwesomeIcons.hand,
               hasPaperTowel,
               "Ima papira za ruke!",
               "Nema papira za ruke.",
               (val) => hasPaperTowel = val,
             ),
-            necessity(
+            quality(
               FontAwesomeIcons.toiletPaper,
               hasToiletPaper,
               "Ima WC papira!",
               "Nema WC papira.",
               (val) => hasToiletPaper = val,
             ),
-            necessity(
+            quality(
               FontAwesomeIcons.soap,
               hasSoap,
               "Ima sapuna!",
               "Nema sapuna.",
               (val) => hasSoap = val,
             ),
-            necessity(
+            quality(
               FontAwesomeIcons.broom,
               isClean,
               'Čisto je!',

@@ -1,4 +1,6 @@
-﻿namespace Wcenzije.API.Entities
+﻿using Wcenzije.API.Enums;
+
+namespace Wcenzije.API.Entities
 {
     public class Review
     {
@@ -9,5 +11,7 @@
         public string Location { get; set; }
         public int LikeCount { get; set; }
         public int Rating { get; set; }
+        public Qualities? Qualities { get; set; }
+        public Gender Gender { get; set; }
     }
 }

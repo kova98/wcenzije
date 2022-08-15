@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wcenzije/models/review.dart';
 import 'package:wcenzije/screens/review.dart';
@@ -9,8 +10,10 @@ import '../screens/add_review/where.dart';
 
 class Map extends StatefulWidget {
   final List<Review>? reviews;
+  final Position position;
   const Map(
-    this.reviews, {
+    this.reviews,
+    this.position, {
     Key? key,
   }) : super(key: key);
 
@@ -20,11 +23,6 @@ class Map extends StatefulWidget {
 
 class _MapState extends State<Map> {
   BitmapDescriptor icon = BitmapDescriptor.defaultMarker;
-
-  static const _initialCameraPosition = CameraPosition(
-    target: LatLng(45.81008366919697, 15.97100945646627),
-    zoom: 18,
-  );
 
   @override
   void initState() {
@@ -39,19 +37,24 @@ class _MapState extends State<Map> {
 
   @override
   Widget build(BuildContext context) {
+    final _initialCameraPosition = CameraPosition(
+      target: LatLng(widget.position.latitude, widget.position.longitude),
+      zoom: 18,
+    );
+
     return Scaffold(
       body: GoogleMap(
         onMapCreated: (GoogleMapController c) {
           GoogleMapsHelper.changeMapMode(c, "assets/maps_style.json");
         },
-        myLocationButtonEnabled: false,
+        myLocationButtonEnabled: true,
         zoomControlsEnabled: false,
         initialCameraPosition: _initialCameraPosition,
         markers: _getMarkers(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => AddReviewWhereScreen()),

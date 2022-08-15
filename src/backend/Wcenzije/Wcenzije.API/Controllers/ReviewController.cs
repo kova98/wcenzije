@@ -20,10 +20,15 @@ namespace Wcenzije.API.Controllers
         }
 
         [HttpGet]
-        public List<Review> GetReviews() => _reviewsRepo
-            .GetReviews()
-            .Where(LocationIsValid)
-            .ToList();
+        public IActionResult GetReviews()
+        {
+            var reviews = _reviewsRepo
+                .GetReviews()
+                .Where(LocationIsValid)
+                .ToList();
+
+            return Ok(reviews);
+        }
 
         [HttpGet("{id}", Name = nameof(GetReview))]
         public IActionResult GetReview(long id)

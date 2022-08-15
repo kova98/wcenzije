@@ -1,4 +1,5 @@
-﻿using Wcenzije.API.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Wcenzije.API.Entities;
 
 namespace Wcenzije.API.Data
 {
@@ -26,12 +27,15 @@ namespace Wcenzije.API.Data
 
         public Review GetReview(long id)
         {
-            return _context.Reviews.FirstOrDefault(x => x.Id == id);    
+            return _context.Reviews
+                .Where(x => x.Id == id)
+                .Include(x=>x.Qualities)
+                .FirstOrDefault();    
         }
 
         public List<Review> GetReviews()
         {
-            return _context.Reviews.ToList();
+            return _context.Reviews.Include(x => x.Qualities).ToList();
         }
 
         public void UpdateReview(Review review)

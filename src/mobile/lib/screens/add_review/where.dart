@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_place/google_place.dart';
 import 'package:wcenzije/screens/add_review/gender.dart';
+import 'package:wcenzije/services/geolocator.dart';
 
 class AddReviewWhereScreen extends StatefulWidget {
   @override
@@ -8,14 +9,15 @@ class AddReviewWhereScreen extends StatefulWidget {
 }
 
 class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
+  static const _radius = 500;
   late GooglePlace googlePlace;
-  // TODO: Initialize with nearby places
   List<AutocompletePrediction> predictions = [];
 
   @override
   void initState() {
-    String apiKey = "AIzaSyA2WxrFeNpqAnWdufzpceiYtPojNzK-WDY";
+    String apiKey = "AIzaSyA58YfseNMaYTIGom5PglCb73FqyQCn62Y";
     googlePlace = GooglePlace(apiKey);
+    initializeNearbyPlaces();
     super.initState();
   }
 
@@ -78,6 +80,17 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
                 child: ListView.builder(
                   itemCount: predictions.length,
                   itemBuilder: (context, index) {
+                    final _name =
+                        predictions[index].description?.split(',').first ??
+                            'error';
+
+                    final _nameWithStreet = predictions[index]
+                            .description
+                            ?.split(',')
+                            .take(2)
+                            .join(",") ??
+                        "error";
+
                     return ListTile(
                       leading: const CircleAvatar(
                         backgroundColor: Colors.white,
@@ -87,17 +100,14 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
                         ),
                       ),
                       title: Text(
-                        predictions[index].description ?? 'error',
+                        _nameWithStreet,
                         style: TextStyle(color: Colors.white),
                       ),
                       onTap: () {
-                        final name =
-                            predictions[index].description?.split(',').first ??
-                                'error';
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AddReviewGenderScreen(name),
+                            builder: (context) => AddReviewGenderScreen(_name),
                           ),
                         );
                       },
@@ -112,15 +122,31 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
     );
   }
 
+  void initializeNearbyPlaces() async {
+    var position = await determinePosition();
+
+    var result = await googlePlace.search.getNearBySearch(
+        Location(lat: position.latitude, lng: position.longitude), 100,
+        rankby: RankBy.Distance);
+
+    var searchResultsAsPredictions = result?.results
+        ?.map((e) => AutocompletePrediction(description: e.name))
+        .toList();
+
+    setState(() {
+      predictions = searchResultsAsPredictions ?? [];
+    });
+  }
+
   void autoCompleteSearch(String value) async {
-    // var position = await GeolocatorPlatform.instance
-    //         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    var position = await determinePosition();
     var result = await googlePlace.autocomplete.get(
       value,
-      location: const LatLon(45.81008366919697, 15.97100945646627),
-      radius: 1000,
+      location: LatLon(position.latitude, position.longitude),
+      radius: _radius,
       region: "hr",
       components: [Component("country", "hr")],
+      strictbounds: true,
     );
     if (result != null && result.predictions != null && mounted) {
       setState(() {

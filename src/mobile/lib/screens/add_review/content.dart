@@ -7,20 +7,44 @@ import 'package:image_picker/image_picker.dart';
 import 'package:wcenzije/models/review.dart';
 import 'package:wcenzije/services/reviews_repo.dart';
 
-class AddReviewContentScreen extends StatefulWidget {
-  final String gender;
-  final String name;
-  final Color color;
-  final Color accentColor;
+import '../../models/qualities.dart';
+import '../../services/geolocator.dart';
 
-  const AddReviewContentScreen(this.gender, this.name, {Key? key})
-      : color = gender == 'female' ? Colors.pink : Colors.blue,
-        accentColor =
-            gender == 'female' ? Colors.pinkAccent : Colors.blueAccent,
-        super(key: key);
+class AddReviewContentScreen extends StatefulWidget {
+  final Gender gender;
+  final String name;
+  late Color color;
+  late Color accentColor;
+
+  AddReviewContentScreen(this.gender, this.name, {Key? key}) : super(key: key) {
+    accentColor = determineAccentColor(gender);
+    color = determineColor(gender);
+  }
 
   @override
   State<AddReviewContentScreen> createState() => _AddReviewContentScreenState();
+
+  Color determineColor(Gender gender) {
+    switch (gender) {
+      case Gender.male:
+        return Colors.blue;
+      case Gender.female:
+        return Colors.pink;
+      case Gender.unisex:
+        return Colors.green;
+    }
+  }
+
+  Color determineAccentColor(Gender gender) {
+    switch (gender) {
+      case Gender.male:
+        return Colors.blueAccent;
+      case Gender.female:
+        return Colors.pinkAccent;
+      case Gender.unisex:
+        return Colors.greenAccent;
+    }
+  }
 }
 
 class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
@@ -31,7 +55,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
   bool hasToiletPaper = false;
   bool hasSoap = false;
   bool isClean = false;
-  bool hasPaperTowel = false;
+  bool hasPaperTowels = false;
   List<XFile> images = [];
 
   @override
@@ -124,21 +148,25 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           print('submit button pressed');
           if (_formKey.currentState!.validate()) {
-            double lat = 45.80895723907695;
-            double lng = 15.97063830900707;
-
+            final pos = await determinePosition();
             final review = Review(
-              id: 0,
-              likeCount: 0,
-              imageUrls: [],
-              name: widget.name,
-              content: contentText,
-              location: Review.formatLocation(lat, lng),
-              rating: (rating * 2).round(),
-            );
+                id: 0,
+                likeCount: 0,
+                imageUrls: [],
+                name: widget.name,
+                content: contentText,
+                location: Review.formatLocation(pos.latitude, pos.longitude),
+                rating: (rating * 2).round(),
+                gender: widget.gender,
+                qualities: Qualities(
+                  hasPaperTowels: hasPaperTowels,
+                  hasSoap: hasSoap,
+                  hasToiletPaper: hasToiletPaper,
+                  isClean: isClean,
+                ));
 
             repo.createReview(review, images);
           }
@@ -193,10 +221,10 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
           children: [
             quality(
               FontAwesomeIcons.hand,
-              hasPaperTowel,
+              hasPaperTowels,
               "Ima papira za ruke!",
               "Nema papira za ruke.",
-              (val) => hasPaperTowel = val,
+              (val) => hasPaperTowels = val,
             ),
             quality(
               FontAwesomeIcons.toiletPaper,

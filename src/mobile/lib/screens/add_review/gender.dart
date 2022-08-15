@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../models/review.dart';
 import 'content.dart';
 
 class AddReviewGenderScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _AddReviewGenderScreenState extends State<AddReviewGenderScreen> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Colors.blue, textStyle: TextStyle(fontSize: 12)),
-                  onPressed: () => pushContentScreen(context, "male"),
+                  onPressed: () => pushContentScreen(context, Gender.male),
                   child: const Icon(
                     Icons.male,
                     size: 200,
@@ -40,7 +41,7 @@ class _AddReviewGenderScreenState extends State<AddReviewGenderScreen> {
                     primary: Colors.pink,
                     textStyle: TextStyle(fontSize: 12),
                   ),
-                  onPressed: () => pushContentScreen(context, "female"),
+                  onPressed: () => pushContentScreen(context, Gender.female),
                   child: const Icon(
                     Icons.female,
                     size: 200,

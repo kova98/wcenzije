@@ -11,40 +11,12 @@ import '../../models/qualities.dart';
 import '../../services/geolocator.dart';
 
 class AddReviewContentScreen extends StatefulWidget {
-  final Gender gender;
   final String name;
-  late Color color;
-  late Color accentColor;
 
-  AddReviewContentScreen(this.gender, this.name, {Key? key}) : super(key: key) {
-    accentColor = determineAccentColor(gender);
-    color = determineColor(gender);
-  }
+  AddReviewContentScreen(this.name, {Key? key}) : super(key: key);
 
   @override
   State<AddReviewContentScreen> createState() => _AddReviewContentScreenState();
-
-  Color determineColor(Gender gender) {
-    switch (gender) {
-      case Gender.male:
-        return Colors.blue;
-      case Gender.female:
-        return Colors.pink;
-      case Gender.unisex:
-        return Colors.green;
-    }
-  }
-
-  Color determineAccentColor(Gender gender) {
-    switch (gender) {
-      case Gender.male:
-        return Colors.blueAccent;
-      case Gender.female:
-        return Colors.pinkAccent;
-      case Gender.unisex:
-        return Colors.greenAccent;
-    }
-  }
 }
 
 class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
@@ -56,35 +28,39 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
   bool hasSoap = false;
   bool isClean = false;
   bool hasPaperTowels = false;
+  Gender gender = Gender.unisex;
   List<XFile> images = [];
+
+  Color color = Colors.green;
+  Color accentColor = Colors.greenAccent;
 
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
-      backgroundColor: widget.color,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                const Padding(padding: EdgeInsets.all(16)),
-                title(),
-                const Padding(padding: EdgeInsets.all(8)),
-                ratingBar(),
-                const Padding(padding: EdgeInsets.all(8)),
-                qualities(),
-                const Padding(padding: EdgeInsets.all(8)),
-                contentTextField(),
-                const Padding(padding: EdgeInsets.all(8)),
-                imagePicker(),
-                const Padding(padding: EdgeInsets.all(8)),
-                submitButton(_formKey)
-              ],
-            ),
+      backgroundColor: color,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              const Padding(padding: EdgeInsets.all(16)),
+              title(),
+              const Padding(padding: EdgeInsets.all(8)),
+              ratingBar(),
+              const Padding(padding: EdgeInsets.all(2)),
+              genderToggleButton(),
+              const Padding(padding: EdgeInsets.all(2)),
+              qualities(),
+              const Padding(padding: EdgeInsets.all(2)),
+              contentTextField(),
+              const Padding(padding: EdgeInsets.all(2)),
+              imagePicker(),
+              const Padding(padding: EdgeInsets.all(2)),
+              submitButton(_formKey)
+            ],
           ),
         ),
       ),
@@ -93,7 +69,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
 
   UnderlineInputBorder coloredBorder() {
     return UnderlineInputBorder(
-      borderSide: BorderSide(color: widget.color),
+      borderSide: BorderSide(color: color),
     );
   }
 
@@ -122,7 +98,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
           validator: contentValidator,
           decoration: InputDecoration(
             labelText: 'Osvrt',
-            labelStyle: TextStyle(color: widget.color),
+            labelStyle: TextStyle(color: color),
             focusedBorder: coloredBorder(),
           ),
         ),
@@ -160,7 +136,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
                 content: contentText,
                 location: Review.formatLocation(pos.latitude, pos.longitude),
                 rating: (rating * 2).round(),
-                gender: widget.gender,
+                gender: gender,
                 qualities: Qualities(
                   hasPaperTowels: hasPaperTowels,
                   hasSoap: hasSoap,
@@ -173,7 +149,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
         },
         child: Text(
           'Objavi',
-          style: TextStyle(color: widget.color),
+          style: TextStyle(color: color),
         ),
         style: ElevatedButton.styleFrom(
           primary: Colors.white,
@@ -186,8 +162,8 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     return Row(
       children: [
         Switch(
-          activeTrackColor: widget.accentColor,
-          activeColor: widget.color,
+          activeTrackColor: accentColor,
+          activeColor: color,
           value: value,
           onChanged: (val) => setState(() {
             updateCallback(val);
@@ -195,13 +171,13 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
         ),
         FaIcon(
           icon,
-          color: value ? widget.color : Colors.grey,
+          color: value ? color : Colors.grey,
         ),
         const Padding(padding: EdgeInsets.all(8)),
         value
             ? Text(
                 positiveMsg,
-                style: TextStyle(color: widget.color),
+                style: TextStyle(color: color),
               )
             : Text(
                 negativeMsg,
@@ -271,7 +247,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
                 const Spacer(),
                 Icon(
                   Icons.collections,
-                  color: widget.color,
+                  color: color,
                   size: 40,
                 ),
                 ...imageCountText(),
@@ -283,6 +259,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     );
   }
 
+  // TODO: add this back in
   Widget imageDisplay() {
     return Card(
       child: Container(
@@ -355,5 +332,85 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
         ),
       ),
     );
+  }
+
+  Color determineColor(Gender gender) {
+    switch (gender) {
+      case Gender.male:
+        return Colors.blue;
+      case Gender.female:
+        return Colors.pink;
+      case Gender.unisex:
+        return Colors.green;
+    }
+  }
+
+  Color determineAccentColor(Gender gender) {
+    switch (gender) {
+      case Gender.male:
+        return Colors.blueAccent;
+      case Gender.female:
+        return Colors.pinkAccent;
+      case Gender.unisex:
+        return Colors.greenAccent;
+    }
+  }
+
+  List<bool> isSelected = [false, true, false];
+
+  genderToggleButton() {
+    return Card(
+      child: LayoutBuilder(
+        builder: (context, constraints) => ToggleButtons(
+          constraints: BoxConstraints.expand(
+            width: constraints.maxWidth / 3 - 1.5,
+            height: 50,
+          ),
+          selectedBorderColor: Colors.transparent,
+          borderColor: Colors.transparent,
+          children: const <Widget>[
+            Icon(Icons.male, color: Colors.blue, size: 30),
+            Icon(Icons.people, color: Colors.green, size: 30),
+            Icon(Icons.female, color: Colors.pink, size: 30),
+          ],
+          onPressed: (int index) {
+            setState(() {
+              setSelected(index);
+              setGender(index);
+              setColor();
+            });
+          },
+          isSelected: isSelected,
+        ),
+      ),
+    );
+  }
+
+  void setColor() {
+    color = determineColor(gender);
+    accentColor = determineAccentColor(gender);
+  }
+
+  void setSelected(int index) {
+    for (int i = 0; i < isSelected.length; i++) {
+      if (i == index) {
+        isSelected[i] = true;
+      } else {
+        isSelected[i] = false;
+      }
+    }
+  }
+
+  void setGender(int index) {
+    switch (index) {
+      case 0:
+        gender = Gender.male;
+        break;
+      case 1:
+        gender = Gender.unisex;
+        break;
+      case 2:
+        gender = Gender.female;
+    }
   }
 }

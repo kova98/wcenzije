@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_place/google_place.dart';
-import 'package:wcenzije/screens/add_review/gender.dart';
+import 'package:wcenzije/screens/add_review/content.dart';
 import 'package:wcenzije/services/geolocator.dart';
 
 class AddReviewWhereScreen extends StatefulWidget {
@@ -9,7 +9,7 @@ class AddReviewWhereScreen extends StatefulWidget {
 }
 
 class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
-  static const _radius = 500;
+  static const _radius = 1000;
   late GooglePlace googlePlace;
   List<AutocompletePrediction> predictions = [];
 
@@ -107,7 +107,7 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AddReviewGenderScreen(_name),
+                            builder: (context) => AddReviewContentScreen(_name),
                           ),
                         );
                       },
@@ -147,6 +147,7 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
       region: "hr",
       components: [Component("country", "hr")],
       strictbounds: true,
+      // TODO: limit to cafes, restaurants, etc
     );
     if (result != null && result.predictions != null && mounted) {
       setState(() {

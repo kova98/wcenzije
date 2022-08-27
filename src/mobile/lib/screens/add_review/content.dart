@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wcenzije/models/review.dart';
+import 'package:wcenzije/screens/home.dart';
 import 'package:wcenzije/services/reviews_repo.dart';
 
 import '../../models/qualities.dart';
@@ -125,26 +126,76 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: ElevatedButton(
         onPressed: () async {
-          print('submit button pressed');
           if (_formKey.currentState!.validate()) {
             final pos = await determinePosition();
             final review = Review(
-                id: 0,
-                likeCount: 0,
-                imageUrls: [],
-                name: widget.name,
-                content: contentText,
-                location: Review.formatLocation(pos.latitude, pos.longitude),
-                rating: (rating * 2).round(),
-                gender: gender,
-                qualities: Qualities(
-                  hasPaperTowels: hasPaperTowels,
-                  hasSoap: hasSoap,
-                  hasToiletPaper: hasToiletPaper,
-                  isClean: isClean,
-                ));
+              id: 0,
+              likeCount: 0,
+              imageUrls: [],
+              name: widget.name,
+              content: contentText,
+              location: Review.formatLocation(pos.latitude, pos.longitude),
+              rating: (rating * 2).round(),
+              gender: gender,
+              qualities: Qualities(
+                hasPaperTowels: hasPaperTowels,
+                hasSoap: hasSoap,
+                hasToiletPaper: hasToiletPaper,
+                isClean: isClean,
+              ),
+            );
 
-            repo.createReview(review, images);
+            showDialog(
+              context: context,
+              builder: (_) => Material(
+                type: MaterialType.transparency,
+                child: Scaffold(
+                  backgroundColor: Colors.black.withAlpha(100),
+                  body: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+            );
+
+            final response = await repo.createReview(review, images);
+
+            if (response != 200) {
+              Navigator.pop(context);
+              const snackBar = SnackBar(
+                content: Text('Došlo je do pogreške.'),
+                backgroundColor: Colors.red,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            } else {
+              Future.delayed(const Duration(seconds: 2), () {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => HomeScreen()),
+                    (route) => false);
+              });
+
+              showDialog(
+                context: context,
+                builder: (_) => const Material(
+                  type: MaterialType.transparency,
+                  child: Scaffold(
+                    backgroundColor: Colors.blue,
+                    body: Center(
+                      child: Text(
+                        'WCenzija objavljena!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
           }
         },
         child: Text(

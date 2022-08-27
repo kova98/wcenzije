@@ -19,7 +19,7 @@ class ReviewsRepository {
     return reviewsList;
   }
 
-  void createReview(Review review, List<XFile> images) async {
+  Future<int> createReview(Review review, List<XFile> images) async {
     final reviewUri = await _createReview(review);
 
     var request = http.MultipartRequest("POST", Uri.parse("$reviewUri/images"));
@@ -30,9 +30,7 @@ class ReviewsRepository {
     }
 
     var response = await request.send();
-    var responseData = await response.stream.toBytes();
-    var responseString = String.fromCharCodes(responseData);
-    print(responseString);
+    return response.statusCode;
   }
 
   Future<String> _createReview(Review review) async {

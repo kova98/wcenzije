@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:wcenzije/helpers/gender_helper.dart';
 import 'package:wcenzije/models/review.dart';
 import 'package:wcenzije/screens/home.dart';
 import 'package:wcenzije/services/reviews_repo.dart';
@@ -385,28 +386,6 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     );
   }
 
-  Color determineColor(Gender gender) {
-    switch (gender) {
-      case Gender.male:
-        return Colors.blue;
-      case Gender.female:
-        return Colors.pink;
-      case Gender.unisex:
-        return Colors.green;
-    }
-  }
-
-  Color determineAccentColor(Gender gender) {
-    switch (gender) {
-      case Gender.male:
-        return Colors.blueAccent;
-      case Gender.female:
-        return Colors.pinkAccent;
-      case Gender.unisex:
-        return Colors.greenAccent;
-    }
-  }
-
   List<bool> isSelected = [false, true, false];
 
   genderToggleButton() {
@@ -438,8 +417,8 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
   }
 
   void setColor() {
-    color = determineColor(gender);
-    accentColor = determineAccentColor(gender);
+    color = gender.color();
+    accentColor = gender.accentColor();
   }
 
   void setSelected(int index) {

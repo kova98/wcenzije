@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:wcenzije/helpers/gender_helper.dart';
 import 'package:wcenzije/models/review.dart';
 
 class ReviewScreen extends StatelessWidget {
@@ -8,13 +9,13 @@ class ReviewScreen extends StatelessWidget {
   late Color color;
 
   ReviewScreen(this.review) {
-    color = determineColor(review.gender);
+    color = review.gender.color();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: color,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
@@ -200,16 +201,5 @@ class ReviewScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  static Color determineColor(Gender gender) {
-    switch (gender) {
-      case Gender.male:
-        return Colors.blue;
-      case Gender.female:
-        return Colors.pink;
-      case Gender.unisex:
-        return Colors.green;
-    }
   }
 }

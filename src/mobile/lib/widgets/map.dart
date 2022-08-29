@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import "package:collection/collection.dart";
 import 'package:wcenzije/models/review.dart';
 import 'package:wcenzije/screens/review.dart';
+import 'package:wcenzije/screens/reviews.dart';
 
 import '../helpers/assets_helper.dart';
 import '../helpers/google_maps_helper.dart';
@@ -23,7 +25,6 @@ class Map extends StatefulWidget {
 
 class _MapState extends State<Map> {
   BitmapDescriptor icon = BitmapDescriptor.defaultMarker;
-
   @override
   void initState() {
     AssetsHelper.getBytesFromAsset('assets/images/wcenzija-icon.png', 64)
@@ -64,31 +65,51 @@ class _MapState extends State<Map> {
   }
 
   Set<Marker> _getMarkers(BuildContext context) {
-    var markers = widget.reviews
-        ?.where((review) => review.location.isNotEmpty)
+    final markers = _groupReviews(widget.reviews ?? [])
+        .where((toilet) => toilet.reviews[0].location.isNotEmpty)
         .map(
-          (review) => Marker(
-            markerId: MarkerId(review.id.toString()),
-            infoWindow: InfoWindow(title: _getTitle(review)),
+          (toilet) => Marker(
+            markerId: MarkerId(toilet.reviews[0].id.toString()),
+            infoWindow: InfoWindow(title: toilet.name),
             icon: icon,
-            position: _getPosition(review.location),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ReviewScreen(review)),
-            ),
+            position: _getPosition(toilet.reviews[0].location),
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => toilet.reviews.length == 1
+                      ? ReviewScreen(toilet.reviews[0])
+                      : ReviewsScreen(toilet.reviews),
+                ),
+              )
+            },
           ),
         )
         .toSet();
 
-    return markers ?? <Marker>{};
-  }
-
-  String _getTitle(Review e) {
-    return "${e.name} ⭐${e.rating}";
+    return markers;
   }
 
   LatLng _getPosition(String location) {
     final locations = location.split(',').map((e) => double.parse(e)).toList();
     return LatLng(locations[0], locations[1]);
   }
+
+  List<Toilet> _groupReviews(List<Review> reviews) {
+    List<Toilet> toilets = [];
+
+    widget.reviews
+        ?.groupListsBy((element) => element.name)
+        .forEach((key, value) {
+      toilets.add(Toilet(key, value));
+    });
+
+    return toilets;
+  }
+}
+
+class Toilet {
+  String name;
+  List<Review> reviews;
+  Toilet(this.name, this.reviews);
 }

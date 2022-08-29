@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:wcenzije/models/review.dart';
 
 class ReviewsRepository {
-  final String _root = "http://10.0.2.2:5085/api/review";
+  final String _root = "https://wcenzije.herokuapp.com/api/review";
 
   Future<List<Review>> getReviews() async {
     final response = await http.get(Uri.parse(_root));

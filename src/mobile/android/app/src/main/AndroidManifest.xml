@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.wcenzije">
+    package="com.kova98.wcenzije">
    <application
-        android:label="wcenzije"
+        android:label="WCenzije"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -32,7 +32,7 @@
             android:value="2" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA2WxrFeNpqAnWdufzpceiYtPojNzK-WDY" />
+            android:value="AIzaSyA58YfseNMaYTIGom5PglCb73FqyQCn62Y" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

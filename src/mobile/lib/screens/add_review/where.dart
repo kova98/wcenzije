@@ -12,6 +12,7 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
   static const _radius = 1000;
   late GooglePlace googlePlace;
   List<AutocompletePrediction> predictions = [];
+  String searchQuery = "";
 
   @override
   void initState() {
@@ -35,7 +36,8 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
               const Padding(
                 padding: EdgeInsets.only(top: 60, bottom: 30),
                 child: Text(
-                  'Gdje?',
+                  'WCenziraj\nobližnji objekt',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 32,
@@ -61,6 +63,10 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
                     ),
                   ),
                   onChanged: (value) {
+                    setState(() {
+                      searchQuery = value;
+                    });
+
                     if (value.isNotEmpty) {
                       autoCompleteSearch(value);
                     } else {
@@ -77,43 +83,55 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
                 height: 10,
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: predictions.length,
-                  itemBuilder: (context, index) {
-                    final _name =
-                        predictions[index].description?.split(',').first ??
-                            'error';
-
-                    final _nameWithStreet = predictions[index]
-                            .description
-                            ?.split(',')
-                            .take(2)
-                            .join(",") ??
-                        "error";
-
-                    return ListTile(
-                      leading: const CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.pin_drop,
-                          color: Colors.blue,
+                child: predictions.isEmpty
+                    ? Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text(
+                          'Ne nalazimo objekt "$searchQuery" u blizini.\n',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 16),
                         ),
+                      )
+                    : ListView.builder(
+                        itemCount: predictions.length,
+                        itemBuilder: (context, index) {
+                          final _name = predictions[index]
+                                  .description
+                                  ?.split(',')
+                                  .first ??
+                              'error';
+
+                          final _nameWithStreet = predictions[index]
+                                  .description
+                                  ?.split(',')
+                                  .take(2)
+                                  .join(",") ??
+                              "error";
+
+                          return ListTile(
+                            leading: const CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child: Icon(
+                                Icons.pin_drop,
+                                color: Colors.blue,
+                              ),
+                            ),
+                            title: Text(
+                              _nameWithStreet,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      AddReviewContentScreen(_name),
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
-                      title: Text(
-                        _nameWithStreet,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => AddReviewContentScreen(_name),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
               ),
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:wcenzije/models/review.dart';
 import 'package:wcenzije/services/geolocator.dart';
@@ -17,13 +18,14 @@ class HomeScreen extends StatelessWidget {
       body: FutureBuilder<MapData>(
         future: loadMapData(),
         builder: (context, snapshot) {
-          return snapshot.hasData
-              ? Map(snapshot.data!.reviews, snapshot.data!.position)
-              : const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ),
-                );
+          if (snapshot.hasData) {
+            // remove the splash screen and show the map
+            FlutterNativeSplash.remove();
+            return Map(snapshot.data!.reviews, snapshot.data!.position);
+          }
+
+          // this text is unnecessary, because the splash screen overlaps it
+          return const Text("Loading ...");
         },
       ),
     );

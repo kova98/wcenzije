@@ -43,6 +43,11 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   image_picker: ^0.8.5+3
   flutter_rating_bar: ^4.0.1
+  flutter_native_splash: ^2.2.8
+
+flutter_native_splash:
+  background_image: "assets/images/gradient_background.png"
+  image: "assets/images/wcenzija-icon.png"
 
 dev_dependencies:
   flutter_test:

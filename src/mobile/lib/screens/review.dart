@@ -17,7 +17,7 @@ class ReviewScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: color,
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(
           children: [
             Row(

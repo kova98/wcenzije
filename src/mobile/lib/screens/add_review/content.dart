@@ -8,14 +8,16 @@ import 'package:wcenzije/helpers/gender_helper.dart';
 import 'package:wcenzije/models/review.dart';
 import 'package:wcenzije/screens/home.dart';
 import 'package:wcenzije/services/reviews_repo.dart';
+import 'package:google_place/google_place.dart' hide Review;
 
 import '../../models/qualities.dart';
 import '../../services/geolocator.dart';
 
 class AddReviewContentScreen extends StatefulWidget {
   final String name;
+  final String placeId;
 
-  AddReviewContentScreen(this.name, {Key? key}) : super(key: key);
+  AddReviewContentScreen(this.name, this.placeId, {Key? key}) : super(key: key);
 
   @override
   State<AddReviewContentScreen> createState() => _AddReviewContentScreenState();
@@ -128,14 +130,16 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
       child: ElevatedButton(
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
-            final pos = await determinePosition();
+            final api = GooglePlace("AIzaSyA58YfseNMaYTIGom5PglCb73FqyQCn62Y");
+            final details = await api.details.get(widget.placeId);
+            final location = details!.result!.geometry!.location!;
             final review = Review(
               id: 0,
               likeCount: 0,
               imageUrls: [],
               name: widget.name,
               content: contentText,
-              location: Review.formatLocation(pos.latitude, pos.longitude),
+              location: Review.formatLocation(location.lat!, location.lng!),
               rating: (rating * 2).round(),
               gender: gender,
               qualities: Qualities(

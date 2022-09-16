@@ -11,7 +11,7 @@ class AddReviewWhereScreen extends StatefulWidget {
 class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
   static const _radius = 1000;
   late GooglePlace googlePlace;
-  List<AutocompletePrediction> predictions = [];
+  List<PlacePrediction> predictions = [];
   String searchQuery = "";
 
   @override
@@ -95,14 +95,11 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
                     : ListView.builder(
                         itemCount: predictions.length,
                         itemBuilder: (context, index) {
-                          final _name = predictions[index]
-                                  .description
-                                  ?.split(',')
-                                  .first ??
-                              'error';
+                          final _name =
+                              predictions[index].name?.split(',').first;
 
                           final _nameWithStreet = predictions[index]
-                                  .description
+                                  .name
                                   ?.split(',')
                                   .take(2)
                                   .join(",") ??
@@ -124,8 +121,8 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      AddReviewContentScreen(_name),
+                                  builder: (context) => AddReviewContentScreen(
+                                      _name!, predictions[index].placeId!),
                                 ),
                               );
                             },
@@ -148,7 +145,7 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
         rankby: RankBy.Distance);
 
     var searchResultsAsPredictions = result?.results
-        ?.map((e) => AutocompletePrediction(description: e.name))
+        ?.map((e) => PlacePrediction(e.name ?? "error", e.placeId ?? "error"))
         .toList();
 
     setState(() {
@@ -169,8 +166,21 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
     );
     if (result != null && result.predictions != null && mounted) {
       setState(() {
-        predictions = result.predictions ?? [];
+        predictions = result.predictions
+                ?.map((e) => PlacePrediction(
+                      e.description,
+                      e.placeId,
+                    ))
+                .toList() ??
+            [];
       });
     }
   }
+}
+
+class PlacePrediction {
+  final String? name;
+  final String? placeId;
+
+  PlacePrediction(this.name, this.placeId);
 }

@@ -79,7 +79,7 @@ class _MapState extends State<Map> {
                 MaterialPageRoute(
                   builder: (context) => toilet.reviews.length == 1
                       ? ReviewScreen(toilet.reviews[0])
-                      : ReviewsScreen(toilet.reviews),
+                      : ReviewsScreen(sortByDate(toilet.reviews)),
                 ),
               )
             },
@@ -105,6 +105,12 @@ class _MapState extends State<Map> {
     });
 
     return toilets;
+  }
+
+  List<Review> sortByDate(List<Review> reviews) {
+    reviews.sort((a, b) => (b.dateCreated).compareTo(a.dateCreated));
+
+    return reviews;
   }
 }
 

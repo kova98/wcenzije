@@ -11,7 +11,6 @@ import 'package:wcenzije/services/reviews_repo.dart';
 import 'package:google_place/google_place.dart' hide Review;
 
 import '../../models/qualities.dart';
-import '../../services/geolocator.dart';
 
 class AddReviewContentScreen extends StatefulWidget {
   final String name;
@@ -141,6 +140,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
             final details = await api.details.get(widget.placeId);
             final location = details!.result!.geometry!.location!;
             final review = Review(
+              dateCreated: DateTime.now(),
               id: 0,
               likeCount: 0,
               imageUrls: [],

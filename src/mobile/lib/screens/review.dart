@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:wcenzije/helpers/date_helper.dart';
 import 'package:wcenzije/helpers/gender_helper.dart';
 import 'package:wcenzije/models/review.dart';
 
@@ -35,6 +36,7 @@ class ReviewScreen extends StatelessWidget {
             title(),
             const Padding(padding: EdgeInsets.all(8)),
             ratingBar(),
+            ...nameAndDate(),
             const Padding(padding: EdgeInsets.all(8)),
             qualities(),
             const Padding(padding: EdgeInsets.all(8)),
@@ -53,8 +55,26 @@ class ReviewScreen extends StatelessWidget {
     );
   }
 
-  TextStyle whiteText() {
-    return TextStyle(color: Colors.white);
+  List<Widget> nameAndDate() {
+    return [
+      const Center(
+        child: Text(
+          'anonimni korisnik',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      const Padding(padding: EdgeInsets.all(2)),
+      Center(
+        child: Text(
+          shortDate(review.dateCreated),
+          style: const TextStyle(color: Colors.white70),
+        ),
+      ),
+    ];
+  }
+
+  Widget whiteText(String text) {
+    return Text(text, style: const TextStyle(color: Colors.white));
   }
 
   Widget contentTextField() {
@@ -64,7 +84,7 @@ class ReviewScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Text(
             review.content,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           )),
     );
   }
@@ -104,7 +124,7 @@ class ReviewScreen extends StatelessWidget {
                 )
               : Text(
                   negativeMsg,
-                  style: TextStyle(color: Colors.grey),
+                  style: const TextStyle(color: Colors.grey),
                 )
         ],
       ),

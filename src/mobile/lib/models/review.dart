@@ -10,6 +10,8 @@ class Review {
   final String name;
   final Gender gender;
   final Qualities qualities;
+  final DateTime dateCreated;
+  final DateTime? dateUpdated;
 
   Review({
     required this.id,
@@ -21,6 +23,8 @@ class Review {
     required this.rating,
     required this.gender,
     required this.qualities,
+    required this.dateCreated,
+    this.dateUpdated,
   });
 
   Review.fromJson(Map<String, dynamic> parsedJson)
@@ -32,7 +36,10 @@ class Review {
         location = parsedJson['location'] ?? "",
         name = parsedJson['name'] ?? "",
         gender = Gender.values[parsedJson['gender'] ?? 0],
-        qualities = Qualities.fromJson(parsedJson['qualities'] ?? {});
+        qualities = Qualities.fromJson(parsedJson['qualities'] ?? {}),
+        dateCreated =
+            DateTime.tryParse(parsedJson['dateCreated']) ?? DateTime(0),
+        dateUpdated = DateTime.tryParse(parsedJson['dateUpdated']);
 
   Map<String, dynamic> toMap() => <String, dynamic>{
         "id": id,
@@ -43,7 +50,9 @@ class Review {
         "name": name,
         "rating": rating,
         "gender": gender.index,
-        "qualities": qualities.toMap()
+        "qualities": qualities.toMap(),
+        // "dateUpdated": dateUpdated.toString(),
+        "dateCreated": dateCreated.toString()
       };
 
   static String formatLocation(double lat, double lng) => "$lat,$lng";

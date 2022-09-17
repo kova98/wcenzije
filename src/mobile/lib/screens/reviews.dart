@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wcenzije/helpers/date_helper.dart';
 import 'package:wcenzije/helpers/gender_helper.dart';
 import 'package:wcenzije/models/review.dart';
 import 'package:wcenzije/screens/review.dart';
@@ -24,11 +25,17 @@ class ReviewsScreen extends StatelessWidget {
           ),
           child: Card(
             child: ListTile(
-              title: Text(reviews[index].name),
-              // subtitle: Text(DateTime.now().toString()), TODO: Add date
-              leading: Icon(
-                reviews[index].gender.icon(),
-                color: reviews[index].gender.color(),
+              title: Text('anonimni korisnik'),
+              subtitle: Text(shortDate(reviews[index].dateCreated)),
+              leading: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    reviews[index].gender.icon(),
+                    color: reviews[index].gender.color(),
+                    size: 32,
+                  ),
+                ],
               ),
               trailing: Text("${reviews[index].rating}/10"),
             ),

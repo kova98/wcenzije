@@ -40,6 +40,7 @@ namespace Wcenzije.API.Controllers
         [HttpPost]
         public IActionResult CreateReview(Review review)
         {
+            review.DateCreated = DateTime.Now;
             _reviewsRepo.CreateReview(review);
 
             return CreatedAtAction(nameof(GetReview), new { Id = review.Id}, review);
@@ -67,6 +68,7 @@ namespace Wcenzije.API.Controllers
 
             if (reviewToUpdate == null) return NotFound();
 
+            review.DateUpdated = DateTime.Now;
             _reviewsRepo.UpdateReview(review);
 
             return Ok(reviewToUpdate);

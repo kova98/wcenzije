@@ -26,6 +26,7 @@ class AddReviewContentScreen extends StatefulWidget {
 class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
   final repo = ReviewsRepository();
 
+  bool ratingValid = true;
   String contentText = '';
   double rating = 2.5;
   bool hasToiletPaper = false;
@@ -78,7 +79,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
   }
 
   TextStyle whiteText() {
-    return TextStyle(color: Colors.white);
+    return const TextStyle(color: Colors.white);
   }
 
   String? contentValidator(String? value) {
@@ -130,6 +131,12 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
       child: ElevatedButton(
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
+            if (rating == 0) {
+              setState(() {
+                ratingValid = false;
+              });
+              return;
+            }
             final api = GooglePlace("AIzaSyA58YfseNMaYTIGom5PglCb73FqyQCn62Y");
             final details = await api.details.get(widget.placeId);
             final location = details!.result!.geometry!.location!;
@@ -208,7 +215,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
           style: TextStyle(color: color),
         ),
         style: ElevatedButton.styleFrom(
-          primary: Colors.white,
+          backgroundColor: Colors.white,
         ),
       ),
     );
@@ -225,9 +232,12 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
             updateCallback(val);
           }),
         ),
-        FaIcon(
-          icon,
-          color: value ? color : Colors.grey,
+        Container(
+          width: 30,
+          child: FaIcon(
+            icon,
+            color: value ? color : Colors.grey,
+          ),
         ),
         const Padding(padding: EdgeInsets.all(8)),
         value
@@ -236,8 +246,8 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
                 style: TextStyle(color: color),
               )
             : Text(
-                negativeMsg,
-                style: TextStyle(color: Colors.grey),
+                positiveMsg,
+                style: const TextStyle(color: Colors.grey),
               )
       ],
     );
@@ -254,28 +264,28 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
             quality(
               FontAwesomeIcons.hand,
               hasPaperTowels,
-              "Ima papira za ruke!",
+              "Ima papira za ruke.",
               "Nema papira za ruke.",
               (val) => hasPaperTowels = val,
             ),
             quality(
               FontAwesomeIcons.toiletPaper,
               hasToiletPaper,
-              "Ima WC papira!",
+              "Ima WC papira.",
               "Nema WC papira.",
               (val) => hasToiletPaper = val,
             ),
             quality(
               FontAwesomeIcons.soap,
               hasSoap,
-              "Ima sapuna!",
+              "Ima sapuna.",
               "Nema sapuna.",
               (val) => hasSoap = val,
             ),
             quality(
               FontAwesomeIcons.broom,
               isClean,
-              'Čisto je!',
+              'Čisto je.',
               'Prljavo je.',
               (val) => isClean = val,
             ),
@@ -306,6 +316,14 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
                   color: color,
                   size: 40,
                 ),
+                if (images.isEmpty) ...[
+                  const Spacer(),
+                  Text(
+                    "Dodaj fotografije",
+                    style: TextStyle(color: color),
+                  ),
+                  const Spacer()
+                ],
                 ...imageCountText(),
               ],
             ),
@@ -346,7 +364,11 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
         : "${images.length} fotografija odabrana";
 
     return images.length > 0
-        ? [const Spacer(), Text(text), const Spacer()]
+        ? [
+            const Spacer(),
+            Text(text, style: TextStyle(color: color)),
+            const Spacer()
+          ]
         : [const Spacer()];
   }
 
@@ -355,7 +377,6 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
       child: Material(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(30),
-        // elevation: 2,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -367,22 +388,24 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
                 direction: Axis.horizontal,
                 allowHalfRating: true,
                 itemCount: 5,
-                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => Icon(
+                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => const Icon(
                   Icons.star,
                   color: Colors.white,
                 ),
                 onRatingUpdate: (r) {
                   setState(() {
                     rating = r;
+                    if (rating > 0) ratingValid = true;
                   });
                 },
               ),
-              Padding(padding: EdgeInsets.all(4)),
-              Text(
-                'Tvoja ocjena: ${(rating * 2).round()}/10',
-                style: whiteText(),
-              ),
+              const Padding(padding: EdgeInsets.all(4)),
+              if (!ratingValid)
+                const Text(
+                  'Molim te ocijeni WC.',
+                  style: TextStyle(color: Colors.white),
+                ),
             ],
           ),
         ),

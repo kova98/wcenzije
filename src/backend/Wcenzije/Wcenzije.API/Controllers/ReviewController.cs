@@ -2,6 +2,7 @@
 using Wcenzije.API.Data;
 using Wcenzije.API.Entities;
 using Wcenzije.API.Extensions;
+using Wcenzije.API.Models.Review;
 using Wcenzije.API.Services;
 
 namespace Wcenzije.API.Controllers
@@ -38,9 +39,21 @@ namespace Wcenzije.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateReview(Review review)
+        public IActionResult CreateReview(CreateReviewRequest request)
         {
-            review.DateCreated = DateTime.Now;
+            var review = new Review
+            {
+                Name = request.Name,
+                Content = request.Content,
+                Gender = request.Gender,
+                Location = request.Location,
+                Qualities = request.Qualities,
+                LikeCount = request.LikeCount,
+                Rating = request.Rating,
+                ImageUrls = request.ImageUrls ?? new(),
+                DateCreated = DateTime.UtcNow,
+            };
+
             _reviewsRepo.CreateReview(review);
 
             return CreatedAtAction(nameof(GetReview), new { Id = review.Id}, review);
@@ -68,7 +81,7 @@ namespace Wcenzije.API.Controllers
 
             if (reviewToUpdate == null) return NotFound();
 
-            review.DateUpdated = DateTime.Now;
+            review.DateUpdated = DateTime.UtcNow;
             _reviewsRepo.UpdateReview(review);
 
             return Ok(reviewToUpdate);

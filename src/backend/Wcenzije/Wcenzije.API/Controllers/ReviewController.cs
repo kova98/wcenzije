@@ -54,6 +54,7 @@ namespace Wcenzije.API.Controllers
                 Rating = request.Rating,
                 ImageUrls = request.ImageUrls ?? new(),
                 DateCreated = DateTime.UtcNow,
+                Author = User.Identity.Name 
             };
 
             _reviewsRepo.CreateReview(review);

@@ -12,8 +12,8 @@ namespace Wcenzije.API.Models.Review
         [Required] public Gender Gender { get; set; }
         [Required] public int Rating { get; set; }
 
-        public List<string>? ImageUrls { get; set; }
+        public List<string> ImageUrls { get; set; }
         public int LikeCount { get; set; }
-        public Qualities? Qualities { get; set; }
+        public Qualities Qualities { get; set; }
     }
 }

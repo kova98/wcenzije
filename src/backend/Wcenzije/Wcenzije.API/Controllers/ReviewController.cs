@@ -70,6 +70,11 @@ namespace Wcenzije.API.Controllers
 
             if (review == null) return NotFound();
 
+            if (review.Author != User.Identity.Name)
+            {
+                return Unauthorized();
+            }
+
             review.ImageUrls = await _imageUploadService.Upload(files);
 
             _reviewsRepo.UpdateReview(review);
@@ -84,6 +89,11 @@ namespace Wcenzije.API.Controllers
 
             if (reviewToUpdate == null) return NotFound();
 
+            if (reviewToUpdate.Author != User.Identity.Name)
+            {
+                return Unauthorized();
+            }
+
             review.DateUpdated = DateTime.UtcNow;
             _reviewsRepo.UpdateReview(review);
 
@@ -97,6 +107,11 @@ namespace Wcenzije.API.Controllers
             var review = _reviewsRepo.GetReview(id);
 
             if (review == null) return NotFound();
+
+            if (review.Author != User.Identity.Name)
+            {
+                return Unauthorized();
+            }
 
             _reviewsRepo.DeleteReview(id);
 

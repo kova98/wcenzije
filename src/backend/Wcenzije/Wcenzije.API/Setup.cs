@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Wcenzije.API.Data;
-using Wcenzije.API.Models.Auth;
+using Wcenzije.API.Entities;
 
 
 namespace Wcenzije.API

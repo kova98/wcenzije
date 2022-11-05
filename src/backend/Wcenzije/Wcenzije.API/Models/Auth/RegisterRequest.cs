@@ -1,6 +1,6 @@
 ﻿namespace Wcenzije.API.Controllers;
 
-public class RegisterModel
+public class RegisterRequest
 {
     public string Email { get; set; }
     public string Username { get; set; }

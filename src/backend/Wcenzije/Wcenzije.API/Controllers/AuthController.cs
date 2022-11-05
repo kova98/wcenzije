@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Wcenzije.API.Entities;
 using Wcenzije.API.Models.Auth;
 
 namespace Wcenzije.API.Controllers
@@ -25,9 +26,9 @@ namespace Wcenzije.API.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            var userExists = await userManager.FindByNameAsync(model.Username) != null;
+            var userExists = await userManager.FindByNameAsync(request.Username) != null;
             if (userExists)
             {
                 return Conflict(new { message = "User already exists." });
@@ -35,12 +36,12 @@ namespace Wcenzije.API.Controllers
 
             var user = new User()
             {
-                Email = model.Email,
-                UserName = model.Username,
+                Email = request.Email,
+                UserName = request.Username,
                 SecurityStamp = Guid.NewGuid().ToString(),
             };
 
-            var result = await userManager.CreateAsync(user, model.Password);
+            var result = await userManager.CreateAsync(user, request.Password);
             if (result.Succeeded == false)
             {
                 return BadRequest(result.Errors);
@@ -51,10 +52,10 @@ namespace Wcenzije.API.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var user = await userManager.FindByNameAsync(model.Username);
-            var passwordValid = await userManager.CheckPasswordAsync(user, model.Password);
+            var user = await userManager.FindByNameAsync(request.Username);
+            var passwordValid = await userManager.CheckPasswordAsync(user, request.Password);
 
             if (user == null || passwordValid == false)
             {

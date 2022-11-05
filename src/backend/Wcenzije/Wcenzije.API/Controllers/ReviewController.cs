@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Wcenzije.API.Data;
 using Wcenzije.API.Entities;
 using Wcenzije.API.Extensions;
@@ -8,6 +9,7 @@ using Wcenzije.API.Services;
 namespace Wcenzije.API.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class ReviewController : ControllerBase
     {

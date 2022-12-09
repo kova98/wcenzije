@@ -22,6 +22,7 @@ namespace Wcenzije.API.Controllers
             _imageUploadService = imageUploadService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetReviews()
         {
@@ -33,6 +34,7 @@ namespace Wcenzije.API.Controllers
             return Ok(reviews);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}", Name = nameof(GetReview))]
         public IActionResult GetReview(long id)
         {

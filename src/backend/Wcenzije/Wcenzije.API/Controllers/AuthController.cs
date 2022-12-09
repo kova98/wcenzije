@@ -11,13 +11,13 @@ namespace Wcenzije.API.Controllers
 {
     [Route("api/auth")]
     [ApiController]
-    public class AuthenticateController : ControllerBase
+    public class AuthController : ControllerBase
     {
         private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthenticateController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;

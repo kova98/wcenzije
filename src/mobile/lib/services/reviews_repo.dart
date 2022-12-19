@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:wcenzije/config.dart';
 import 'package:wcenzije/models/review.dart';
 
 class ReviewsRepository {
-  final String _root = "https://wcenzije.herokuapp.com/api/review";
+  final String _root = Config().apiRoot;
 
   Future<List<Review>> getReviews() async {
     final response = await http.get(Uri.parse(_root));

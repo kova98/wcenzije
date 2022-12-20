@@ -3,8 +3,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import "package:collection/collection.dart";
 import 'package:wcenzije/models/review.dart';
+import 'package:wcenzije/screens/login.dart';
 import 'package:wcenzije/screens/review.dart';
 import 'package:wcenzije/screens/reviews.dart';
+import 'package:wcenzije/services/auth.dart';
 
 import '../helpers/assets_helper.dart';
 import '../helpers/google_maps_helper.dart';
@@ -25,6 +27,8 @@ class Map extends StatefulWidget {
 
 class _MapState extends State<Map> {
   BitmapDescriptor icon = BitmapDescriptor.defaultMarker;
+  final authService = AuthService();
+
   @override
   void initState() {
     AssetsHelper.getBytesFromAsset('assets/images/wcenzija-icon.png', 64)
@@ -56,10 +60,16 @@ class _MapState extends State<Map> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AddReviewWhereScreen()),
-        ),
+        onPressed: () async {
+          final isAuthorized = await authService.isAuthorized();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  isAuthorized ? AddReviewWhereScreen() : const LoginScreen(),
+            ),
+          );
+        },
       ),
     );
   }

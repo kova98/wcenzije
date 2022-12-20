@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:wcenzije/helpers/gender_helper.dart';
 import 'package:wcenzije/models/review.dart';
 import 'package:wcenzije/screens/home.dart';
+import 'package:wcenzije/screens/login.dart';
+import 'package:wcenzije/services/auth.dart';
 import 'package:wcenzije/services/reviews_repo.dart';
 import 'package:google_place/google_place.dart' hide Review;
 
@@ -24,6 +26,7 @@ class AddReviewContentScreen extends StatefulWidget {
 
 class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
   final repo = ReviewsRepository();
+  final authService = AuthService();
 
   bool ratingValid = true;
   String contentText = '';
@@ -172,6 +175,17 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
 
             final response = await repo.createReview(review, images);
 
+            if (response == 401) {
+              await authService.logout();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen(),
+                ),
+              );
+              return;
+            }
+
             if (response != 200) {
               Navigator.pop(context);
               const snackBar = SnackBar(
@@ -179,6 +193,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
                 backgroundColor: Colors.red,
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              return;
             } else {
               Future.delayed(const Duration(seconds: 2), () {
                 Navigator.pushAndRemoveUntil(

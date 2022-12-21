@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 import 'package:wcenzije/helpers/date_helper.dart';
 import 'package:wcenzije/helpers/gender_helper.dart';
 import 'package:wcenzije/models/review.dart';
+import 'package:photo_view/photo_view.dart';
 
-class ReviewScreen extends StatelessWidget {
+class ReviewScreen extends StatefulWidget {
   final Review review;
   late Color color;
 
@@ -14,9 +16,15 @@ class ReviewScreen extends StatelessWidget {
   }
 
   @override
+  State<ReviewScreen> createState() => _ReviewScreenState();
+}
+
+class _ReviewScreenState extends State<ReviewScreen> {
+  int _currentPage = 1;
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: color,
+      backgroundColor: widget.color,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(
@@ -39,10 +47,11 @@ class ReviewScreen extends StatelessWidget {
             ...nameAndDate(),
             const Padding(padding: EdgeInsets.all(8)),
             qualities(),
-            const Padding(padding: EdgeInsets.all(8)),
-            imageDisplay(),
-            const Padding(padding: EdgeInsets.all(8)),
+            widget.review.imageUrls.isNotEmpty
+                ? imageDisplay()
+                : const SizedBox.shrink(),
             contentTextField(),
+            const Padding(padding: EdgeInsets.all(8)),
           ],
         ),
       ),
@@ -51,7 +60,7 @@ class ReviewScreen extends StatelessWidget {
 
   UnderlineInputBorder coloredBorder() {
     return UnderlineInputBorder(
-      borderSide: BorderSide(color: color),
+      borderSide: BorderSide(color: widget.color),
     );
   }
 
@@ -66,7 +75,7 @@ class ReviewScreen extends StatelessWidget {
       const Padding(padding: EdgeInsets.all(2)),
       Center(
         child: Text(
-          shortDate(review.dateCreated),
+          shortDate(widget.review.dateCreated),
           style: const TextStyle(color: Colors.white70),
         ),
       ),
@@ -83,7 +92,7 @@ class ReviewScreen extends StatelessWidget {
       child: Padding(
           padding: const EdgeInsets.all(16),
           child: Text(
-            review.content,
+            widget.review.content,
             style: const TextStyle(fontSize: 16),
           )),
     );
@@ -94,7 +103,7 @@ class ReviewScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Center(
         child: Text(
-          review.name,
+          widget.review.name,
           textAlign: TextAlign.center,
           style: const TextStyle(
             color: Colors.white,
@@ -114,13 +123,13 @@ class ReviewScreen extends StatelessWidget {
         children: [
           FaIcon(
             icon,
-            color: value ? color : Colors.grey,
+            color: value ? widget.color : Colors.grey,
           ),
           const Padding(padding: EdgeInsets.all(8)),
           value
               ? Text(
                   positiveMsg,
-                  style: TextStyle(color: color),
+                  style: TextStyle(color: widget.color),
                 )
               : Text(
                   negativeMsg,
@@ -140,25 +149,25 @@ class ReviewScreen extends StatelessWidget {
           children: [
             quality(
               FontAwesomeIcons.hand,
-              review.qualities.hasPaperTowels,
+              widget.review.qualities.hasPaperTowels,
               "Ima papira za ruke!",
               "Nema papira za ruke.",
             ),
             quality(
               FontAwesomeIcons.toiletPaper,
-              review.qualities.hasToiletPaper,
+              widget.review.qualities.hasToiletPaper,
               "Ima WC papira!",
               "Nema WC papira.",
             ),
             quality(
               FontAwesomeIcons.soap,
-              review.qualities.hasSoap,
+              widget.review.qualities.hasSoap,
               "Ima sapuna!",
               "Nema sapuna.",
             ),
             quality(
               FontAwesomeIcons.broom,
-              review.qualities.isClean,
+              widget.review.qualities.isClean,
               "Čisto je!",
               "Prljavo je.",
             ),
@@ -169,36 +178,65 @@ class ReviewScreen extends StatelessWidget {
   }
 
   Widget imageDisplay() {
-    return Card(
-      child: Container(
-        height: 300.0,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: review.imageUrls.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Container(
-                child: Image.network(
-                  review.imageUrls[index],
-                  fit: BoxFit.cover,
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                            : null,
-                      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(5),
+        child: Container(
+            height: 300,
+            child: Stack(
+              children: [
+                PhotoViewGallery.builder(
+                  backgroundDecoration: BoxDecoration(color: Colors.white),
+                  scrollPhysics: const BouncingScrollPhysics(),
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentPage = index + 1;
+                    });
+                  },
+                  builder: (BuildContext context, int index) {
+                    return PhotoViewGalleryPageOptions(
+                      imageProvider:
+                          NetworkImage(widget.review.imageUrls[index]),
+                      initialScale: PhotoViewComputedScale.covered * 0.95,
+                      heroAttributes: PhotoViewHeroAttributes(tag: index),
                     );
                   },
+                  itemCount: widget.review.imageUrls.length,
+                  loadingBuilder: (context, event) => Center(
+                    child: Container(
+                      width: 20.0,
+                      height: 20.0,
+                      child: CircularProgressIndicator(
+                        value: event == null
+                            ? 0
+                            : event.cumulativeBytesLoaded /
+                                (event.expectedTotalBytes ?? 1),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            );
-          },
-        ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: Text(
+                          '$_currentPage/${widget.review.imageUrls.length}',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            )),
       ),
     );
   }
@@ -215,7 +253,7 @@ class ReviewScreen extends StatelessWidget {
               RatingBar.builder(
                 ignoreGestures: true,
                 glowColor: Colors.amber,
-                initialRating: review.rating / 2,
+                initialRating: widget.review.rating / 2,
                 minRating: 0,
                 direction: Axis.horizontal,
                 allowHalfRating: true,

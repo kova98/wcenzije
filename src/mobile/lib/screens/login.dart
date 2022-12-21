@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:wcenzije/screens/add_review/where.dart';
+import 'package:wcenzije/screens/register.dart';
 import 'package:wcenzije/services/auth.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String? _password;
   String? _error;
   bool _loading = false;
+  bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +30,17 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               const Padding(padding: EdgeInsets.all(15)),
-              Text(
-                'Prijavi se za nastavak',
-                style: TextStyle(
+              const Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Prijavi se za nastavak',
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold),
+                    fontSize: 42,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
               ),
               Spacer(),
               _error == null
@@ -55,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       _error = null;
                     });
                   },
-                  style: const TextStyle(color: Colors.blue),
+                  style: const TextStyle(color: Colors.black87),
                   decoration: InputDecoration(
                     errorStyle: TextStyle(color: Colors.white),
                     hintText: 'ime',
@@ -84,11 +91,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       _error = null;
                     });
                   },
-                  obscureText: true,
-                  style: const TextStyle(color: Colors.blue),
+                  obscureText: !_passwordVisible,
+                  style: const TextStyle(color: Colors.black87),
                   decoration: InputDecoration(
                     hintText: 'lozinka',
                     prefixIcon: const Icon(Icons.key),
+                    suffixIcon: IconButton(
+                      splashRadius: 5,
+                      icon: Icon(_passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          _passwordVisible = !_passwordVisible;
+                        });
+                      },
+                    ),
                     fillColor: Colors.white,
                     filled: true,
                     border: OutlineInputBorder(
@@ -115,7 +133,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         decoration: TextDecoration.underline,
                       ),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () => print('register clicked'), // TODO
+                        ..onTap = () => Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegisterScreen(),
+                              ),
+                            ),
                     ),
                   ],
                 ),
@@ -165,7 +188,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     backgroundColor: Colors.white,
                     minimumSize: Size(120, 50)),
               ),
-              const Padding(padding: EdgeInsets.all(10)),
             ],
           ),
         ),

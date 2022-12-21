@@ -49,6 +49,26 @@ class AuthService {
     return true;
   }
 
+  Future<int> register(String email, String name, String password) async {
+    final headers = <String, String>{
+      'Content-Type': 'application/json; charset=utf-8',
+    };
+
+    final body = jsonEncode({
+      "Email": email,
+      "Username": name,
+      "Password": password,
+    });
+
+    final response = await http.post(
+      Uri.parse("$_root/register"),
+      headers: headers,
+      body: body,
+    );
+
+    return response.statusCode;
+  }
+
   Future logout() async {
     await _storage.delete(key: _storageKey);
   }

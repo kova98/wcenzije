@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:wcenzije/screens/home.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:wcenzije/screens/intro.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   await dotenv.load();
@@ -21,8 +23,20 @@ class App extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       title: 'Wcenzije',
-      home: HomeScreen(),
+      home: FutureBuilder<bool>(
+        future: introCompleted(),
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? ((snapshot.data ?? false) ? HomeScreen() : const IntroScreen())
+              : const CircularProgressIndicator();
+        },
+      ),
     );
+  }
+
+  Future<bool> introCompleted() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('intro_completed') ?? false;
   }
 }
 

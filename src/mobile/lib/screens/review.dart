@@ -47,9 +47,11 @@ class _ReviewScreenState extends State<ReviewScreen> {
             ...nameAndDate(),
             const Padding(padding: EdgeInsets.all(8)),
             qualities(),
+            const Padding(padding: EdgeInsets.all(4)),
             widget.review.imageUrls.isNotEmpty
                 ? imageDisplay()
                 : const SizedBox.shrink(),
+            const Padding(padding: EdgeInsets.all(4)),
             contentTextField(),
             const Padding(padding: EdgeInsets.all(8)),
           ],

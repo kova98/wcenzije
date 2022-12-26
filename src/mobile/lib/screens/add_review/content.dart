@@ -35,6 +35,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
   bool hasSoap = false;
   bool isClean = false;
   bool hasPaperTowels = false;
+  bool isAnonymous = false;
   Gender gender = Gender.unisex;
   List<XFile> images = [];
 
@@ -130,113 +131,43 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
   Widget submitButton(GlobalKey<FormState> _formKey) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: ElevatedButton(
-        onPressed: () async {
-          if (_formKey.currentState!.validate()) {
-            if (rating == 0) {
-              setState(() {
-                ratingValid = false;
-              });
-              return;
-            }
-            final api = GooglePlace("AIzaSyA58YfseNMaYTIGom5PglCb73FqyQCn62Y");
-            final details = await api.details.get(widget.placeId);
-            final location = details!.result!.geometry!.location!;
-            final review = Review(
-              dateCreated: DateTime.now(),
-              id: 0,
-              likeCount: 0,
-              imageUrls: [],
-              name: widget.name,
-              content: contentText,
-              location: Review.formatLocation(location.lat!, location.lng!),
-              rating: (rating * 2).round(),
-              gender: gender,
-              qualities: Qualities(
-                hasPaperTowels: hasPaperTowels,
-                hasSoap: hasSoap,
-                hasToiletPaper: hasToiletPaper,
-                isClean: isClean,
+      child: Row(
+        children: [
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () => submit(_formKey),
+              child: Text(
+                'Objavi',
+                style: TextStyle(color: color),
               ),
-            );
-
-            showDialog(
-              context: context,
-              builder: (_) => Material(
-                type: MaterialType.transparency,
-                child: Scaffold(
-                  backgroundColor: Colors.black.withAlpha(100),
-                  body: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
               ),
-            );
-
-            final response = await repo.createReview(review, images);
-
-            if (response == 401) {
-              await authService.logout();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginScreen(),
-                ),
-              );
-              return;
-            }
-
-            if (response != 200) {
-              Navigator.pop(context);
-              const snackBar = SnackBar(
-                content: Text('Došlo je do pogreške.'),
-                backgroundColor: Colors.red,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              return;
-            } else {
-              Future.delayed(const Duration(seconds: 2), () {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (_) => HomeScreen()),
-                    (route) => false);
-              });
-
-              showDialog(
-                context: context,
-                builder: (_) => const Material(
-                  type: MaterialType.transparency,
-                  child: Scaffold(
-                    backgroundColor: Colors.blue,
-                    body: Center(
-                      child: Text(
-                        'WCenzija objavljena!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            }
-          }
-        },
-        child: Text(
-          'Objavi',
-          style: TextStyle(color: color),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-        ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+              ),
+              child: Icon(
+                FontAwesomeIcons.userSecret,
+                color: isAnonymous ? color : Colors.grey,
+              ),
+              onPressed: () {
+                setState(() {
+                  isAnonymous = !isAnonymous;
+                });
+              },
+            ),
+          )
+        ],
       ),
     );
   }
 
-  Widget quality(icon, value, positiveMsg, negativeMsg, updateCallback) {
+  Widget toggle(icon, value, positiveMsg, updateCallback) {
     return Row(
       children: [
         Switch(
@@ -276,32 +207,28 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            quality(
+            toggle(
               FontAwesomeIcons.hand,
               hasPaperTowels,
               "Ima papira za ruke.",
-              "Nema papira za ruke.",
               (val) => hasPaperTowels = val,
             ),
-            quality(
+            toggle(
               FontAwesomeIcons.toiletPaper,
               hasToiletPaper,
               "Ima WC papira.",
-              "Nema WC papira.",
               (val) => hasToiletPaper = val,
             ),
-            quality(
+            toggle(
               FontAwesomeIcons.soap,
               hasSoap,
               "Ima sapuna.",
-              "Nema sapuna.",
               (val) => hasSoap = val,
             ),
-            quality(
+            toggle(
               FontAwesomeIcons.broom,
               isClean,
               'Čisto je.',
-              'Prljavo je.',
               (val) => isClean = val,
             ),
           ],
@@ -483,6 +410,101 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
         break;
       case 2:
         gender = Gender.female;
+    }
+  }
+
+  void submit(_formKey) async {
+    if (_formKey.currentState!.validate()) {
+      if (rating == 0) {
+        setState(() {
+          ratingValid = false;
+        });
+        return;
+      }
+      final api = GooglePlace("AIzaSyA58YfseNMaYTIGom5PglCb73FqyQCn62Y");
+      final details = await api.details.get(widget.placeId);
+      final location = details!.result!.geometry!.location!;
+      final review = Review(
+          dateCreated: DateTime.now(),
+          id: 0,
+          likeCount: 0,
+          imageUrls: [],
+          name: widget.name,
+          content: contentText,
+          location: Review.formatLocation(location.lat!, location.lng!),
+          rating: (rating * 2).round(),
+          gender: gender,
+          qualities: Qualities(
+            hasPaperTowels: hasPaperTowels,
+            hasSoap: hasSoap,
+            hasToiletPaper: hasToiletPaper,
+            isClean: isClean,
+          ),
+          isAnonymous: isAnonymous);
+
+      showDialog(
+        context: context,
+        builder: (_) => Material(
+          type: MaterialType.transparency,
+          child: Scaffold(
+            backgroundColor: Colors.black.withAlpha(100),
+            body: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ),
+      );
+
+      final response = await repo.createReview(review, images);
+
+      if (response == 401) {
+        await authService.logout();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginScreen(),
+          ),
+        );
+        return;
+      }
+
+      if (response != 200) {
+        Navigator.pop(context);
+        const snackBar = SnackBar(
+          content: Text('Došlo je do pogreške.'),
+          backgroundColor: Colors.red,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return;
+      } else {
+        Future.delayed(const Duration(seconds: 2), () {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => HomeScreen()),
+              (route) => false);
+        });
+
+        showDialog(
+          context: context,
+          builder: (_) => const Material(
+            type: MaterialType.transparency,
+            child: Scaffold(
+              backgroundColor: Colors.blue,
+              body: Center(
+                child: Text(
+                  'WCenzija objavljena!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      }
     }
   }
 }

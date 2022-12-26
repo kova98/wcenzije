@@ -25,7 +25,7 @@ class ReviewsScreen extends StatelessWidget {
           ),
           child: Card(
             child: ListTile(
-              title: Text('anonimni korisnik'),
+              title: Text(reviews[index].author ?? "anonimni korisnik"),
               subtitle: Text(shortDate(reviews[index].dateCreated)),
               leading: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

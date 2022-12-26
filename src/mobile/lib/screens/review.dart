@@ -68,10 +68,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   List<Widget> nameAndDate() {
     return [
-      const Center(
+      Center(
         child: Text(
-          'anonimni korisnik',
-          style: TextStyle(color: Colors.white),
+          widget.review.author ?? "anonimni korisnik",
+          style: const TextStyle(color: Colors.white),
         ),
       ),
       const Padding(padding: EdgeInsets.all(2)),

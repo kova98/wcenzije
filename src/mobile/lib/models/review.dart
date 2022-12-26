@@ -12,6 +12,8 @@ class Review {
   final Qualities qualities;
   final DateTime dateCreated;
   final DateTime? dateUpdated;
+  final String? author;
+  final bool isAnonymous;
 
   Review({
     required this.id,
@@ -24,6 +26,8 @@ class Review {
     required this.gender,
     required this.qualities,
     required this.dateCreated,
+    required this.isAnonymous,
+    this.author,
     this.dateUpdated,
   });
 
@@ -39,7 +43,9 @@ class Review {
         qualities = Qualities.fromJson(parsedJson['qualities'] ?? {}),
         dateCreated =
             DateTime.tryParse(parsedJson['dateCreated']) ?? DateTime(0),
-        dateUpdated = DateTime.tryParse(parsedJson['dateUpdated']);
+        dateUpdated = DateTime.tryParse(parsedJson['dateUpdated']),
+        isAnonymous = parsedJson['isAnonymous'] ?? false,
+        author = parsedJson['author'];
 
   Map<String, dynamic> toMap() => <String, dynamic>{
         "id": id,
@@ -52,7 +58,8 @@ class Review {
         "gender": gender.index,
         "qualities": qualities.toMap(),
         // "dateUpdated": dateUpdated.toString(),
-        "dateCreated": dateCreated.toString()
+        "dateCreated": dateCreated.toString(),
+        "isAnonymous": isAnonymous
       };
 
   static String formatLocation(double lat, double lng) => "$lat,$lng";

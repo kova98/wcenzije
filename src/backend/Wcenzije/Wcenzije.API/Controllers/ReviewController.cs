@@ -28,8 +28,15 @@ namespace Wcenzije.API.Controllers
         {
             var reviews = _reviewsRepo
                 .GetReviews()
-                .Where(LocationIsValid)
-                .ToList();
+                .Where(LocationIsValid);
+
+            foreach (var review in reviews)
+            {
+                if (review.IsAnonymous)
+                {
+                    review.Author = null;
+                }
+            }
 
             return Ok(reviews);
         }
@@ -56,7 +63,8 @@ namespace Wcenzije.API.Controllers
                 Rating = request.Rating,
                 ImageUrls = request.ImageUrls ?? new(),
                 DateCreated = DateTime.UtcNow,
-                Author = User.Identity.Name 
+                Author = User.Identity.Name,
+                IsAnonymous = request.IsAnonymous
             };
 
             _reviewsRepo.CreateReview(review);

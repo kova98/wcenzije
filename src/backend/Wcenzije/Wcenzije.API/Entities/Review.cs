@@ -12,6 +12,7 @@ namespace Wcenzije.API.Entities
         public string Name { get; set; }
         public string Location { get; set; }
         public string Author { get; set; }
+        public bool IsAnonymous { get; set; }
         public int LikeCount { get; set; }
         public int Rating { get; set; }
         public Qualities Qualities { get; set; }

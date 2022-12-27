@@ -6,6 +6,7 @@ import 'package:wcenzije/helpers/date_helper.dart';
 import 'package:wcenzije/helpers/gender_helper.dart';
 import 'package:wcenzije/models/review.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ReviewScreen extends StatefulWidget {
   final Review review;
@@ -198,8 +199,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   },
                   builder: (BuildContext context, int index) {
                     return PhotoViewGalleryPageOptions(
-                      imageProvider:
-                          NetworkImage(widget.review.imageUrls[index]),
+                      imageProvider: CachedNetworkImageProvider(
+                          widget.review.imageUrls[index]),
                       initialScale: PhotoViewComputedScale.covered * 0.95,
                       heroAttributes: PhotoViewHeroAttributes(tag: index),
                     );

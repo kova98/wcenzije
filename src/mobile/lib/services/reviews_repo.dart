@@ -5,10 +5,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:wcenzije/config.dart';
 import 'package:wcenzije/models/review.dart';
 import 'package:wcenzije/services/auth.dart';
+import 'package:wcenzije/services/compressor.dart';
 
 class ReviewsRepository {
   final String _root = "${Config().apiRoot}/review";
   final _authService = AuthService();
+  final _compressorService = CompressorService();
 
   Future<List<Review>> getReviews() async {
     final response = await http.get(Uri.parse(_root));
@@ -43,7 +45,8 @@ class ReviewsRepository {
     });
 
     for (var image in images) {
-      var pic = await http.MultipartFile.fromPath("files", image.path);
+      final compressed = await _compressorService.compressImage(image.path);
+      var pic = await http.MultipartFile.fromPath("files", compressed);
       request.files.add(pic);
     }
 

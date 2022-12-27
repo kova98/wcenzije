@@ -207,15 +207,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   },
                   itemCount: widget.review.imageUrls.length,
                   loadingBuilder: (context, event) => Center(
-                    child: Container(
-                      width: 20.0,
-                      height: 20.0,
-                      child: CircularProgressIndicator(
-                        value: event == null
-                            ? 0
-                            : event.cumulativeBytesLoaded /
-                                (event.expectedTotalBytes ?? 1),
-                      ),
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
                     ),
                   ),
                 ),

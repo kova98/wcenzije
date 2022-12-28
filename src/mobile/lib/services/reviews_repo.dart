@@ -70,4 +70,27 @@ class ReviewsRepository {
 
     return reviewResponse;
   }
+
+  Future<List<Review>> getReviewsByAuthor(String author) async {
+    var authToken = await _authService.getAuthToken();
+
+    var headers = <String, String>{
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization': 'Bearer $authToken'
+    };
+
+    final response = await http.get(
+      Uri.parse("$_root/author/$author"),
+      headers: headers,
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch reviews');
+    }
+
+    final reviews = json.decode(response.body) as List;
+    final reviewsList = reviews.map((item) => Review.fromJson(item)).toList();
+
+    return reviewsList;
+  }
 }

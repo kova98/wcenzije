@@ -57,20 +57,6 @@ class _MapState extends State<Map> {
         initialCameraPosition: _initialCameraPosition,
         markers: _getMarkers(context),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () async {
-          final isAuthorized = await authService.isAuthorized();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  isAuthorized ? AddReviewWhereScreen() : const LoginScreen(),
-            ),
-          );
-        },
-      ),
     );
   }
 

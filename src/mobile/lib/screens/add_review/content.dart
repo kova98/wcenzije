@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wcenzije/helpers/gender_helper.dart';
 import 'package:wcenzije/models/review.dart';
+import 'package:wcenzije/screens/add_review/where.dart';
 import 'package:wcenzije/screens/home.dart';
 import 'package:wcenzije/screens/login.dart';
 import 'package:wcenzije/services/auth.dart';
@@ -462,7 +463,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => LoginScreen(),
+            builder: (context) => LoginScreen(AddReviewWhereScreen()),
           ),
         );
         return;

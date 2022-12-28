@@ -7,11 +7,16 @@ import '../config.dart';
 
 class AuthService {
   final String _root = Config().apiRoot + "/auth";
-  final _storageKey = "wcenzije_auth_token";
+  final _authStorageKey = "wcenzije_auth_token";
+  final _usernameStorageKey = "wcenzije_username";
   final _storage = FlutterSecureStorage();
 
   Future<String?> getAuthToken() async {
-    return await _storage.read(key: _storageKey);
+    return await _storage.read(key: _authStorageKey);
+  }
+
+  Future<String?> getUsername() async {
+    return await _storage.read(key: _usernameStorageKey);
   }
 
   Future<bool> isAuthorized() async {
@@ -45,7 +50,8 @@ class AuthService {
 
     final token = Token.fromJson(json.decode(response.body));
 
-    await _storage.write(key: _storageKey, value: token.value);
+    await _storage.write(key: _authStorageKey, value: token.value);
+    await _storage.write(key: _usernameStorageKey, value: name);
     return true;
   }
 
@@ -70,6 +76,6 @@ class AuthService {
   }
 
   Future logout() async {
-    await _storage.delete(key: _storageKey);
+    await _storage.delete(key: _authStorageKey);
   }
 }

@@ -6,7 +6,8 @@ import 'package:wcenzije/screens/login.dart';
 import 'package:wcenzije/services/auth.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  final Widget redirect;
+  const RegisterScreen(this.redirect, {Key? key}) : super(key: key);
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -169,7 +170,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ..onTap = () => Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
+                              builder: (context) =>
+                                  LoginScreen(widget.redirect),
                             ),
                           ), // TODO
                   ),
@@ -214,7 +216,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AddReviewWhereScreen(),
+                              builder: (context) => widget.redirect,
                             ),
                           )
                         });

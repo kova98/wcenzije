@@ -41,6 +41,13 @@ namespace Wcenzije.API.Controllers
             return Ok(reviews);
         }
 
+        [HttpGet("author/{author}")]
+        public IActionResult GetReviewsByAuthor(string author)
+        {
+            var reviews = _reviewsRepo.GetReviewsByAuthor(author);
+            return Ok(reviews);
+        }
+
         [AllowAnonymous]
         [HttpGet("{id}", Name = nameof(GetReview))]
         public IActionResult GetReview(long id)

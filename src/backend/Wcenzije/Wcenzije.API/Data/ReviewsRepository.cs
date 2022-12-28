@@ -38,6 +38,14 @@ namespace Wcenzije.API.Data
             return _context.Reviews.Include(x => x.Qualities).ToList();
         }
 
+        public List<Review> GetReviewsByAuthor(string author)
+        {
+            return _context.Reviews
+                .Include(x => x.Qualities)
+                .Where(x => x.Author == author)
+                .ToList();
+        }
+
         public void UpdateReview(Review review)
         {
             var reviewToUpdate = _context.Reviews.Find(review.Id);

@@ -9,5 +9,6 @@ namespace Wcenzije.API.Data
         Review GetReview(long id);
         void UpdateReview(Review review);
         void DeleteReview(long id);
+        List<Review> GetReviewsByAuthor(string user);
     }
 }

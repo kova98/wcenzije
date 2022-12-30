@@ -108,9 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return snapshot.hasData
             ? Map(snapshot.data!.reviews, snapshot.data!.position)
             : const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
+                child: CircularProgressIndicator(),
               );
       },
     );

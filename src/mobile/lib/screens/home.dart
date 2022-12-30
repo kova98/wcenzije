@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         notchMargin: 5,
@@ -95,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? map()
                     : ProfileScreen()
                 : const PermissionScreen()
-            : progressIndicator(),
+            : const CircularProgressIndicator(),
       ),
     );
   }

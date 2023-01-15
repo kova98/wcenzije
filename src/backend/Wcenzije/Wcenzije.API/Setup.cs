@@ -23,6 +23,21 @@ namespace Wcenzije.API
 
             return collection;
         }
+        public static IServiceCollection AddCorsForAnyOrigin(this IServiceCollection services, string policy)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(policy, builder =>
+                {
+                    builder
+                        .AllowAnyOrigin() 
+                        .WithMethods("GET", "POST")
+                        .AllowAnyHeader();
+                });
+            });
+
+            return services;
+        }
 
         public static WebApplicationBuilder AddAndConfigureAuthentication(this WebApplicationBuilder builder)
         {

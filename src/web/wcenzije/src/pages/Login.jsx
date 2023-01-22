@@ -40,41 +40,47 @@ const Login = ({ setToken }) => {
         </div>
         <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
           <div className="card-body">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Ime</span>
-              </label>
-              <input
-                required
-                onChange={(e) => setUsername(e.target.value)}
-                type="text"
-                placeholder="ime"
-                className="input input-bordered"
-              />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Lozinka</span>
-              </label>
-              <input
-                required
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                placeholder="lozinka"
-                className="input input-bordered password peer"
-              />
-              <label className="label">
-                <a href="#" className="label-text-alt link link-hover">
-                  Zaboravio si lozinku?
-                </a>
-              </label>
-            </div>
-            <p className="text-error">{error}</p>
-            <div className="form-control mt-6">
-              <button onClick={handleLogin} className="btn btn-primary">
-                Prijava
-              </button>
-            </div>
+            <form onSubmit={handleLogin}>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Ime</span>
+                </label>
+                <input
+                  required
+                  onChange={(e) => setUsername(e.target.value)}
+                  type="text"
+                  placeholder="ime"
+                  className="input input-bordered"
+                />
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Lozinka</span>
+                </label>
+                <input
+                  required
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  placeholder="lozinka"
+                  className="input input-bordered password peer"
+                />
+                <label className="label">
+                  <a href="#" className="label-text-alt link link-hover">
+                    Zaboravio si lozinku?
+                  </a>
+                </label>
+              </div>
+              <p className="text-error">{error}</p>
+              <div className="form-control mt-6">
+                <button
+                  type="submit"
+                  onClick={handleLogin}
+                  className="btn btn-primary"
+                >
+                  Prijava
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

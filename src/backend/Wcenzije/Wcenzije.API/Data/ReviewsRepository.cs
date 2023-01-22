@@ -35,7 +35,10 @@ namespace Wcenzije.API.Data
 
         public List<Review> GetReviews()
         {
-            return _context.Reviews.Include(x => x.Qualities).ToList();
+            return _context.Reviews
+                .Include(x => x.Qualities)
+                .OrderByDescending(x=>x.DateCreated)
+                .ToList();
         }
 
         public List<Review> GetReviewsByAuthor(string author)

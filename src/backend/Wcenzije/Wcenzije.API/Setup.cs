@@ -78,6 +78,16 @@ namespace Wcenzije.API
             return builder;
         }
 
+        public static WebApplicationBuilder AddAndConfigureAuthorization(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireClaim("Role", "Admin"));
+            });
+
+            return builder;
+        }
+
         private static string GetHerokuDbConnectionString()
         {
             var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");

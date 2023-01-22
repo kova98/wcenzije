@@ -16,6 +16,7 @@ builder.Services.SetupAndAddDbContext(builder.Configuration);
 builder.Services.AddCorsForAnyOrigin(CorsPolicy);
 
 builder.AddAndConfigureAuthentication();
+builder.AddAndConfigureAuthorization();
 
 var app = builder.Build();
 //app.UseHttpsRedirection();

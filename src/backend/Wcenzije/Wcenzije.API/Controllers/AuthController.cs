@@ -14,13 +14,11 @@ namespace Wcenzije.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<User> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthController(UserManager<User> userManager, IConfiguration configuration)
         {
             this.userManager = userManager;
-            this.roleManager = roleManager;
             _configuration = configuration;
         }
 
@@ -62,7 +60,7 @@ namespace Wcenzije.API.Controllers
                 return Unauthorized();
             }
 
-            var authClaims = await GetUserClaims(user);
+            var authClaims = GetUserClaims(user);
 
             var securityToken = GetSecurityToken(authClaims);
 
@@ -73,7 +71,7 @@ namespace Wcenzije.API.Controllers
             });
         }
 
-        private async Task<List<Claim>> GetUserClaims(User user)
+        private List<Claim> GetUserClaims(User user)
         {
             var authClaims = new List<Claim>
             {
@@ -81,11 +79,9 @@ namespace Wcenzije.API.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
-            var userRoles = await userManager.GetRolesAsync(user);
-
-            foreach (var userRole in userRoles)
+            foreach (var role in user.UserRoles ?? Array.Empty<string>())
             {
-                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                authClaims.Add(new Claim("Role", role));
             }
 
             return authClaims;

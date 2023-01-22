@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 
-const Admin = ({ setToken }) => {
+const Reviews = ({ setToken }) => {
   const SERVER_URL = import.meta.env.VITE_SERVER_ROOT_URL;
   const endpoint = `${SERVER_URL}/api/admin`;
 
@@ -31,14 +31,12 @@ const Admin = ({ setToken }) => {
       <table className="table w-full">
         <thead>
           <tr>
-            <th>Id</th>
             <th>Info</th>
           </tr>
         </thead>
         <tbody>
           {items.map((item) => (
             <tr key={item.id}>
-              <th>{item.id}</th>
               <th>
                 <div className="flex items-center space-x-3">
                   <div className="avatar">
@@ -84,4 +82,4 @@ const Admin = ({ setToken }) => {
   );
 };
 
-export default Admin;
+export default Reviews;

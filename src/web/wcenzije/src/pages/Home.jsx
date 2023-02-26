@@ -23,8 +23,33 @@ const Home = () => {
     return messages[index];
   };
 
+  const handleAppStoreClicked = () => {
+    document.getElementById("app-store-modal").click();
+  };
+
   return (
     <div>
+      <label htmlFor="app-store-modal" className="hidden"></label>
+
+      <input type="checkbox" id="app-store-modal" className="modal-toggle" />
+      <label htmlFor="app-store-modal" className="modal cursor-pointer">
+        <label className="modal-box relative" htmlFor="">
+          <h3 className="text-lg font-bold">
+            Nažalost, nema nas na App Storu! 😢
+          </h3>
+          <p className="py-4">
+            Hvala ti na interesu, ali nažalost, za sad nas nema na App Storu.
+            <span className="font-semibold">
+              {" "}
+              To se možda promijeni u budućnosti!
+            </span>{" "}
+            <span>Prati nas na </span>
+            <a className="link" href="https://www.instagram.com/wcenzije/">
+              Instagramu.
+            </a>
+          </p>
+        </label>
+      </label>
       <div className="hero min-h-screen bg-blue-600">
         <div className="hero-content flex-col md:flex-row gap-10 w-full text-center md:text-left">
           <div className="p-6 md:w-1/2">
@@ -38,7 +63,7 @@ const Home = () => {
               <div className="flex col-span-4 md:justify-start justify-center">
                 <GooglePlayBadge />
                 <div className="p-3"></div>
-                <AppStoreBadge />
+                <AppStoreBadge onClick={handleAppStoreClicked} />
               </div>
             </div>
           </div>

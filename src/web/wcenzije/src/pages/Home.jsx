@@ -50,14 +50,20 @@ const Home = () => {
           </p>
         </label>
       </label>
-      <div className="hero min-h-screen bg-blue-600">
+      <div
+        className="hero min-h-screen"
+        style={{
+          backgroundColor: "#2196F3",
+          fontFamily: "'Gotham Rounded', sans-serif",
+        }}
+      >
         <div className="hero-content flex-col md:flex-row gap-10 w-full text-center md:text-left">
           <div className="p-6 md:w-1/2">
             <div className="grid grid-cols-4 gap-4">
-              <h1 className="text-white text-5xl font-bold col-span-4 pt-6 md:pt-0">
+              <h1 className="text-white text-6xl font-bold col-span-4 pt-6 md:pt-0">
                 {getRandomMessage()}
               </h1>
-              <p className="text-blue-100 py-6 col-span-4 text-2xl">
+              <p className="text-blue-50 py-6 col-span-4 text-2xl">
                 Reci to javno u WCenzije aplikaciji!
               </p>
               <div className="flex col-span-4 md:justify-start justify-center">

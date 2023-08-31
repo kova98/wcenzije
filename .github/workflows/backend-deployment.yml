@@ -1,11 +1,7 @@
 name: Backend Deployment
 
 on:
-  workflow_dispatch:
   push:
-    branches: [ "main" ]
-    paths: ['src/backend/Wcenzije**']
-  pull_request:
     branches: [ "main" ]
     paths: ['src/backend/Wcenzije**']
 

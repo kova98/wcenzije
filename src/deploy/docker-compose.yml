@@ -4,13 +4,19 @@ services:
   web-frontend: 
     container_name: web-frontend
     image: kova98k/wcenzije:web-frontend
+    build:
+      context: ..
+      dockerfile: ./deploy/wcenzije-web-frontend.Dockerfile
     ports: 
       - 8001:80
   api:
     container_name: api
     image: kova98k/wcenzije:api
+    build:
+      context: ..
+      dockerfile: ./deploy/wcenzije-api.Dockerfile
     ports: 
       - 8002:5000
     environment:
-      - DATABASE_URL=postgres://kkgjgdjxypfwwy:c614c281e6c70ab18cfdbb559b5cb4d17a87bdb5891761a740b1b3f3bf301e1e@ec2-54-170-90-26.eu-west-1.compute.amazonaws.com:5432/dfme24bv9feni4
+      - DATABASE_URL=${DATABASE_URL}
       - PORT=5000

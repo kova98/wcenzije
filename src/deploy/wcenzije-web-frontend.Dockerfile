@@ -1,15 +1,15 @@
 # Build Stage
 FROM node:18-alpine as build
 WORKDIR /app
-COPY package.json .
-COPY package-lock.json .
+COPY ./web/wcenzije/package.json .
+COPY ./web/wcenzije/package-lock.json .
 RUN npm install
-COPY . .
+COPY ./web/wcenzije .
 RUN npm run build
 
 # Final Stage
 FROM nginx:1.23.3-alpine
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./web/wcenzije/nginx.conf /etc/nginx/conf.d/default.conf
 WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
 COPY --from=build /app/dist . 

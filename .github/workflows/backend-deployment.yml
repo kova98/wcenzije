@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   push:
     branches: [ "feature/backend-deployment-action" ]
-    paths: ['src/backend/Wcenzije**']
+   # paths: ['src/backend/Wcenzije**']
   pull_request:
     branches: [ "feature/backend-deployment-action" ]
-    paths: ['src/backend/Wcenzije**']
+   # paths: ['src/backend/Wcenzije**']
 
 jobs:
   build-and-publish:
@@ -34,5 +34,5 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Push the images to Docker Hub
-      run: docker push kova98k/wcenzije:api
+      run: docker push kova98k/wcenzije:api 
       

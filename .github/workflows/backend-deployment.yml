@@ -3,11 +3,11 @@ name: Backend Deployment
 on:
   workflow_dispatch:
   push:
-    branches: [ "feature/backend-deployment-action" ]
-   # paths: ['src/backend/Wcenzije**']
+    branches: [ "main" ]
+    paths: ['src/backend/Wcenzije**']
   pull_request:
-    branches: [ "feature/backend-deployment-action" ]
-   # paths: ['src/backend/Wcenzije**']
+    branches: [ "main" ]
+    paths: ['src/backend/Wcenzije**']
 
 jobs:
   build-and-publish:

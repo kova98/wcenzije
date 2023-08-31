@@ -84,6 +84,11 @@ class ReviewsRepository {
       headers: headers,
     );
 
+    if (response.statusCode == 401) {
+      _authService.logout();
+      return [];
+    }
+
     if (response.statusCode != 200) {
       throw Exception('Failed to fetch reviews');
     }

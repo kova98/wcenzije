@@ -4,6 +4,8 @@ A public toilet reviewing app.
 
 https://wcenzije.com
 
+![image](https://github.com/kova98/wcenzije/assets/28999034/df799437-ce38-4396-bb5c-ef7829ad88e2)
+
 Published on [Google Play](https://play.google.com/store/apps/details?id=com.kova98.wcenzije). 
 
 ## Features
@@ -15,8 +17,10 @@ Published on [Google Play](https://play.google.com/store/apps/details?id=com.kov
 - Mobile App
    - Basic auth
    - View all reviews on a map
+   - View all reviews for specific location
    - View review details
    - Add reviews with or without images
+   - View all the reviews you posted
    
 ## Tech Stack
 **Mobile:** Flutter  

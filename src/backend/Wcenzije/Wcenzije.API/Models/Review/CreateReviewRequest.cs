@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Wcenzije.API.Entities;
-using Wcenzije.API.Enums;
+using Wcenzije.Domain.Entities;
+using Wcenzije.Domain.Enums;
 
 namespace Wcenzije.API.Models.Review
 {

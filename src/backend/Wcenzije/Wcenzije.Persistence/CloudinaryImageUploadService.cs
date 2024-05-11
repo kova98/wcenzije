@@ -1,7 +1,9 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.AspNetCore.Http;
+using Wcenzije.Domain.Services;
 
-namespace Wcenzije.API.Services
+namespace Wcenzije.Persistence
 {
     public class CloudinaryImageUploadService : IImageUploadService
     {

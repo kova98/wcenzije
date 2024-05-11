@@ -1,6 +1,6 @@
-﻿using Wcenzije.API.Entities;
+﻿using Wcenzije.Domain.Entities;
 
-namespace Wcenzije.API.Data
+namespace Wcenzije.Domain.Repositories
 {
     public interface IReviewsRepository
     {

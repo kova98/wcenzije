@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Wcenzije.API.Entities;
-using Wcenzije.API.Models.Auth;
+using Wcenzije.Domain.Entities;
 
-namespace Wcenzije.API.Data
+namespace Wcenzije.Persistence
 {
     public class AppDbContext : IdentityDbContext<User>
     {

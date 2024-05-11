@@ -6,15 +6,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Wcenzije.API.Data;
+using Wcenzije.Persistence;
 
 #nullable disable
 
 namespace Wcenzije.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221105151331_Author")]
-    partial class Author
+    [Migration("20221030143657_Identity")]
+    partial class Identity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -190,10 +190,8 @@ namespace Wcenzije.API.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Author")
-                        .HasColumnType("text");
-
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DateCreated")
@@ -206,15 +204,18 @@ namespace Wcenzije.API.Migrations
                         .HasColumnType("integer");
 
                     b.Property<List<string>>("ImageUrls")
+                        .IsRequired()
                         .HasColumnType("text[]");
 
                     b.Property<int>("LikeCount")
                         .HasColumnType("integer");
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<long?>("QualitiesId")
@@ -230,7 +231,7 @@ namespace Wcenzije.API.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("Wcenzije.API.Entities.User", b =>
+            modelBuilder.Entity("Wcenzije.API.Models.Auth.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -305,7 +306,7 @@ namespace Wcenzije.API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Wcenzije.API.Entities.User", null)
+                    b.HasOne("Wcenzije.API.Models.Auth.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -314,7 +315,7 @@ namespace Wcenzije.API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Wcenzije.API.Entities.User", null)
+                    b.HasOne("Wcenzije.API.Models.Auth.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -329,7 +330,7 @@ namespace Wcenzije.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Wcenzije.API.Entities.User", null)
+                    b.HasOne("Wcenzije.API.Models.Auth.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -338,7 +339,7 @@ namespace Wcenzije.API.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Wcenzije.API.Entities.User", null)
+                    b.HasOne("Wcenzije.API.Models.Auth.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

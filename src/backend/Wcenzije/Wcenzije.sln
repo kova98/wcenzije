@@ -5,6 +5,10 @@ VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wcenzije.API", "Wcenzije.API\Wcenzije.API.csproj", "{2227B950-47B3-44F7-8FFF-2F7F867ADEF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wcenzije.Domain", "Wcenzije.Domain\Wcenzije.Domain.csproj", "{C6DCF13E-9D58-4820-9AD3-A4D372F10E31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wcenzije.Persistence", "Wcenzije.Persistence\Wcenzije.Persistence.csproj", "{979973C5-D932-4B21-8343-139F8356AA90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{2227B950-47B3-44F7-8FFF-2F7F867ADEF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2227B950-47B3-44F7-8FFF-2F7F867ADEF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2227B950-47B3-44F7-8FFF-2F7F867ADEF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6DCF13E-9D58-4820-9AD3-A4D372F10E31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6DCF13E-9D58-4820-9AD3-A4D372F10E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6DCF13E-9D58-4820-9AD3-A4D372F10E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6DCF13E-9D58-4820-9AD3-A4D372F10E31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{979973C5-D932-4B21-8343-139F8356AA90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{979973C5-D932-4B21-8343-139F8356AA90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{979973C5-D932-4B21-8343-139F8356AA90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{979973C5-D932-4B21-8343-139F8356AA90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

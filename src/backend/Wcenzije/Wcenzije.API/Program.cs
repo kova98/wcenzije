@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Wcenzije.API;
-using Wcenzije.API.Data;
-using Wcenzije.API.Services;
+using Wcenzije.Domain.Repositories;
+using Wcenzije.Domain.Services;
+using Wcenzije.Persistence;
 
 const string CorsPolicy = "allowAnyOrigin";
 

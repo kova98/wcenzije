@@ -1,4 +1,4 @@
-﻿namespace Wcenzije.API.Entities
+﻿namespace Wcenzije.Domain.Entities
 {
     public class Qualities
     {

@@ -1,6 +1,6 @@
-﻿using Wcenzije.API.Enums;
+﻿using Wcenzije.Domain.Enums;
 
-namespace Wcenzije.API.Entities
+namespace Wcenzije.Domain.Entities
 {
     public class Review
     {

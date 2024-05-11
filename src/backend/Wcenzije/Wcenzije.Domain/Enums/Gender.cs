@@ -1,4 +1,4 @@
-﻿namespace Wcenzije.API.Enums
+﻿namespace Wcenzije.Domain.Enums
 {
     public enum Gender
     {

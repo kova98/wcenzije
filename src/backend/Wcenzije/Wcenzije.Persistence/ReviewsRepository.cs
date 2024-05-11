@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Wcenzije.API.Entities;
+using Wcenzije.Domain.Entities;
+using Wcenzije.Domain.Repositories;
 
-namespace Wcenzije.API.Data
+namespace Wcenzije.Persistence
 {
     public class ReviewsRepository : IReviewsRepository
     {

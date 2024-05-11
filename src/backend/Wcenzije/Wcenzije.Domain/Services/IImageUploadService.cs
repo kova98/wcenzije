@@ -1,4 +1,6 @@
-﻿namespace Wcenzije.API.Services
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Wcenzije.Domain.Services
 {
     public interface IImageUploadService
     {

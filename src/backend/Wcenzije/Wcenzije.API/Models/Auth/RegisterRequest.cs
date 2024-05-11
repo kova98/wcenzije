@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Wcenzije.API.Controllers;
+namespace Wcenzije.API.Models.Auth;
 
 public class RegisterRequest
 {

@@ -6,15 +6,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Wcenzije.API.Data;
+using Wcenzije.Persistence;
 
 #nullable disable
 
 namespace Wcenzije.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221226213355_Review_IsAnonymous")]
-    partial class Review_IsAnonymous
+    [Migration("20221105151331_Author")]
+    partial class Author
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -207,9 +207,6 @@ namespace Wcenzije.API.Migrations
 
                     b.Property<List<string>>("ImageUrls")
                         .HasColumnType("text[]");
-
-                    b.Property<bool>("IsAnonymous")
-                        .HasColumnType("boolean");
 
                     b.Property<int>("LikeCount")
                         .HasColumnType("integer");

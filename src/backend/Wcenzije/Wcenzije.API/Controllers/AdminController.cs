@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Wcenzije.API.Data;
+using Wcenzije.Domain.Repositories;
 
 namespace Wcenzije.API.Controllers
 {

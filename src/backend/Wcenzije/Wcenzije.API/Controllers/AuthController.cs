@@ -4,8 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Wcenzije.API.Entities;
 using Wcenzije.API.Models.Auth;
+using Wcenzije.Domain.Entities;
 
 namespace Wcenzije.API.Controllers
 {

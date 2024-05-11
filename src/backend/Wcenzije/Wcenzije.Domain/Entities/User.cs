@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Wcenzije.API.Entities;
+namespace Wcenzije.Domain.Entities;
 
 public class User : IdentityUser
 {

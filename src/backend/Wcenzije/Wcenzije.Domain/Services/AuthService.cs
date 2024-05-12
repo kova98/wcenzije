@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Wcenzije.Domain.Entities;
 using Wcenzije.Domain.Exceptions;
@@ -10,7 +11,7 @@ using Wcenzije.Domain.Repositories;
 
 namespace Wcenzije.Domain.Services;
 
-public class AuthService(IUserRepository userRepository, IConfiguration configuration) : IAuthService
+public class AuthService(IUserRepository userRepository, IConfiguration configuration, ILogger<AuthService> logger) : IAuthService
 {
     public async Task<Result> Register(string email, string username, string password)
     {
@@ -30,7 +31,8 @@ public class AuthService(IUserRepository userRepository, IConfiguration configur
         var result = await userRepository.CreateAsync(user, password);
         if (result.Succeeded == false)
         {
-            // TODO: log result.Errors
+            var errors = string.Join(". ", result.Errors.Select(x => x.Description));
+            logger.LogInformation("User creation failed. {Errors}", errors);
             return Result.Fail("User creation failed.");
         }
         
@@ -73,7 +75,8 @@ public class AuthService(IUserRepository userRepository, IConfiguration configur
         var result = await userRepository.DeleteAsync(user);
         if (result.Succeeded == false)
         {
-            // TODO: log result.Errors
+            var errors = string.Join(". ", result.Errors.Select(x => x.Description));
+            logger.LogInformation("Account deletion failed. {Errors}", errors);
             return Result.Fail("Account deletion failed.");
         }
         

@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Wcenzije.Domain;
 using Wcenzije.Domain.Entities;
 using Wcenzije.Domain.Exceptions;
@@ -18,7 +19,7 @@ public class AuthServiceTests
     
     public AuthServiceTests()
     {
-        _authService = new AuthService(_userRepository, _configuration);
+        _authService = new AuthService(_userRepository, _configuration, Substitute.For<ILogger<AuthService>>());
     }
     
     [Fact]

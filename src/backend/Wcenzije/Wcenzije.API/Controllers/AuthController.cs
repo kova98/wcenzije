@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Wcenzije.API.Models.Auth;
 using Wcenzije.Domain.Services;
 
@@ -23,5 +24,13 @@ public class AuthController(IAuthService authService) : ControllerBase
         var result = await authService.Login(request.Username, request.Password);
         return result.ToHttpResult();
     }
-
+    
+    [Authorize]
+    [HttpDelete]
+    [Route("account")]
+    public async Task<IResult> DeleteAccount()
+    {
+        var result = await authService.DeleteAccount(User.Identity?.Name);
+        return result.ToHttpResult();
+    }
 }

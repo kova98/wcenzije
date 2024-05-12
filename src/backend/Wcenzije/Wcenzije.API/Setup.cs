@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Wcenzije.Domain.Entities;
+using Wcenzije.Domain.Extensions;
 using Wcenzije.Persistence;
 
 
@@ -13,12 +14,9 @@ public static class Setup
 {
     public static IServiceCollection SetupAndAddDbContext(this IServiceCollection collection, ConfigurationManager configuration)
     {
-        var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
-        if (string.IsNullOrEmpty(connectionString))
-        {
-            throw new Exception("Connection string is null or empty! Make sure ENV ConnectionString is set up.");
-        }
-
+        
+        var connectionString = configuration.TryGet("ConnectionString");
+        
         collection.AddDbContext<AppDbContext>(opt => opt.UseNpgsql(connectionString));
 
         return collection;

@@ -11,6 +11,7 @@ public static class ResultExtensions
         ResultStatus.Ok => Results.Ok(result.Value),
         ResultStatus.Failure => Results.BadRequest(new ErrorBody(result.Message!)),
         ResultStatus.Created => Results.Created($"{location}/{result.Value}", null),
+        ResultStatus.Unauthorized => Results.Unauthorized(),
         _ => throw new ArgumentOutOfRangeException(nameof(result.Status), result.Status, null)
     };
     
@@ -18,6 +19,7 @@ public static class ResultExtensions
     {
         ResultStatus.Ok => Results.NoContent(),
         ResultStatus.Failure => Results.BadRequest(new ErrorBody(result.Message!)),
+        ResultStatus.Unauthorized => Results.Unauthorized(),
         _ => throw new ArgumentOutOfRangeException(nameof(result.Status), result.Status, null)
     };
 }

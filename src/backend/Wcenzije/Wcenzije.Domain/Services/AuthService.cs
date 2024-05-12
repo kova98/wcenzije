@@ -42,13 +42,13 @@ public class AuthService(IUserRepository userRepository, IConfiguration configur
         var user = await userRepository.FindByNameAsync(username);
         if (user is null)
         {
-            return Result<LoginResponse>.Unauthorized($"User '{username}' not found.");
+            return Result<LoginResponse>.Unauthorized();
         }
         
         var passwordValid = await userRepository.CheckPasswordAsync(user, password);
         if (passwordValid == false)
         {
-            return Result<LoginResponse>.Unauthorized("Invalid password.");
+            return Result<LoginResponse>.Unauthorized();
         }
         
         var authClaims = GetUserClaims(user);
@@ -67,7 +67,7 @@ public class AuthService(IUserRepository userRepository, IConfiguration configur
         var user = await userRepository.FindByNameAsync(username);
         if (user == null)
         {
-            return Result.Unauthorized($"User '{username}' not found.");
+            return Result.Unauthorized();
         }
         
         var result = await userRepository.DeleteAsync(user);

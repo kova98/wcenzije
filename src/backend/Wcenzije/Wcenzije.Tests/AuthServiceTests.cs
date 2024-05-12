@@ -77,7 +77,6 @@ public class AuthServiceTests
         var result = await _authService.Login(username, "pass");
      
         result.Status.Should().Be(ResultStatus.Unauthorized);
-        result.Message.Should().Be("User 'test' not found.");
     }
     
     [Fact]
@@ -90,7 +89,6 @@ public class AuthServiceTests
         var result = await _authService.Login(user.UserName, "pass");
      
         result.Status.Should().Be(ResultStatus.Unauthorized);
-        result.Message.Should().Be("Invalid password.");
     }
     
     [Theory]
@@ -171,7 +169,6 @@ public class AuthServiceTests
         var result = await _authService.DeleteAccount(username);
      
         result.Status.Should().Be(ResultStatus.Unauthorized);
-        result.Message.Should().Be("User 'test' not found.");
     }
     
     [Fact]

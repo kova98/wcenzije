@@ -21,9 +21,8 @@ public class Result
         Status = ResultStatus.Failure
     };
     
-    public static Result Unauthorized(string? message = null) => new Result
+    public static Result Unauthorized() => new Result
     {
-        Message = message,
         Status = ResultStatus.Unauthorized
     };
 }
@@ -55,12 +54,10 @@ public class Result<T> : Result
         Status = ResultStatus.Created
     };
     
-    public static Result<T> Unauthorized(string? message = null) => new()
+    public new static Result<T> Unauthorized() => new()
     {
-        Message = message,
         Status = ResultStatus.Unauthorized
     };
-    
 }
 
 public enum ResultStatus

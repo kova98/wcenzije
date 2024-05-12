@@ -25,6 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Wcenzije.API\Wcenzije.API.csproj" />
       <ProjectReference Include="..\Wcenzije.Domain\Wcenzije.Domain.csproj" />
       <ProjectReference Include="..\Wcenzije.Persistence\Wcenzije.Persistence.csproj" />
     </ItemGroup>

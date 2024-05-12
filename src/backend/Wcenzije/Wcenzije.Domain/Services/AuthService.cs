@@ -1,18 +1,20 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Wcenzije.Domain.Entities;
+using Wcenzije.Domain.Exceptions;
+using Wcenzije.Domain.Extensions;
+using Wcenzije.Domain.Repositories;
 
 namespace Wcenzije.Domain.Services;
 
-public class AuthService(UserManager<User> userManager, IConfiguration configuration) : IAuthService
+public class AuthService(IUserRepository userRepository, IConfiguration configuration) : IAuthService
 {
     public async Task<Result> Register(string email, string username, string password)
     {
-        var userExists = await userManager.FindByNameAsync(username) != null;
+        var userExists = await userRepository.FindByNameAsync(username) != null;
         if (userExists)
         {
             return Result.Fail("User already exists.");
@@ -25,7 +27,7 @@ public class AuthService(UserManager<User> userManager, IConfiguration configura
             SecurityStamp = Guid.NewGuid().ToString(),
         };
         
-        var result = await userManager.CreateAsync(user, password);
+        var result = await userRepository.CreateAsync(user, password);
         if (result.Succeeded == false)
         {
             // TODO: log result.Errors
@@ -37,18 +39,20 @@ public class AuthService(UserManager<User> userManager, IConfiguration configura
     
     public async Task<Result<LoginResponse>> Login(string username, string password)
     {
-        var user = await userManager.FindByNameAsync(username);
-        var passwordValid = await userManager.CheckPasswordAsync(user, password);
-        
-        if (user == null || passwordValid == false)
+        var user = await userRepository.FindByNameAsync(username);
+        if (user is null)
         {
-            return Result<LoginResponse>.Unauthorized();
+            return Result<LoginResponse>.Unauthorized($"User '{username}' not found.");
+        }
+        
+        var passwordValid = await userRepository.CheckPasswordAsync(user, password);
+        if (passwordValid == false)
+        {
+            return Result<LoginResponse>.Unauthorized("Invalid password.");
         }
         
         var authClaims = GetUserClaims(user);
-        
         var securityToken = GetSecurityToken(authClaims);
-        
         var response = new LoginResponse
         (
             Token: new JwtSecurityTokenHandler().WriteToken(securityToken),
@@ -56,6 +60,24 @@ public class AuthService(UserManager<User> userManager, IConfiguration configura
         );
         
         return Result<LoginResponse>.Ok(response);
+    }
+    
+    public async Task<Result> DeleteAccount(string username)
+    {
+        var user = await userRepository.FindByNameAsync(username);
+        if (user == null)
+        {
+            return Result.Unauthorized($"User '{username}' not found.");
+        }
+        
+        var result = await userRepository.DeleteAsync(user);
+        if (result.Succeeded == false)
+        {
+            // TODO: log result.Errors
+            return Result.Fail("Account deletion failed.");
+        }
+        
+        return Result.Ok("User account deleted successfully!");
     }
     
     
@@ -77,12 +99,19 @@ public class AuthService(UserManager<User> userManager, IConfiguration configura
     
     private JwtSecurityToken GetSecurityToken(List<Claim> authClaims)
     {
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
+        var issuer = configuration.TryGet("JWT:ValidIssuer");
+        var audience = configuration.TryGet("JWT:ValidAudience");
+        var jwtSecret = configuration.TryGet("JWT:Secret");
+        if (jwtSecret.Length < 16)
+        {
+            throw new ConfigInvalidException("JWT:Secret", jwtSecret, "Secret must be at least 16 characters long");
+        }
         
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
         var token = new JwtSecurityToken
         (
-            issuer: configuration["JWT:ValidIssuer"],
-            audience: configuration["JWT:ValidAudience"],
+            issuer: issuer,
+            audience: audience,
             expires: DateTime.Now.AddMonths(1),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)

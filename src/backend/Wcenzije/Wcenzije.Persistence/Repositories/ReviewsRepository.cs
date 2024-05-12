@@ -2,7 +2,7 @@
 using Wcenzije.Domain.Entities;
 using Wcenzije.Domain.Repositories;
 
-namespace Wcenzije.Persistence
+namespace Wcenzije.Persistence.Repositories
 {
     public class ReviewsRepository : IReviewsRepository
     {

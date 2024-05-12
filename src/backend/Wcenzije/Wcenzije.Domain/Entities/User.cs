@@ -4,5 +4,5 @@ namespace Wcenzije.Domain.Entities;
 
 public class User : IdentityUser
 {
-    public string[] UserRoles { get; set; }
+    public string[] UserRoles { get; set; } = [];
 }

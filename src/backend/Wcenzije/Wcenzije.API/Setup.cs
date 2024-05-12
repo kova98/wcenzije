@@ -23,6 +23,7 @@ public static class Setup
 
         return collection;
     }
+    
     public static IServiceCollection AddCorsForAnyOrigin(this IServiceCollection services, string policy)
     {
         services.AddCors(options =>
@@ -31,7 +32,7 @@ public static class Setup
             {
                 builder
                     .AllowAnyOrigin() 
-                    .WithMethods("GET", "POST")
+                    .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     .AllowAnyHeader();
             });
         });

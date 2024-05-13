@@ -26,7 +26,7 @@ namespace Wcenzije.Persistence.Repositories
             _context.SaveChanges();
         }
 
-        public Review GetReview(long id)
+        public Review? GetReview(long id)
         {
             return _context.Reviews
                 .Where(x => x.Id == id)
@@ -49,7 +49,14 @@ namespace Wcenzije.Persistence.Repositories
                 .Where(x => x.Author == author)
                 .ToList();
         }
-
+        
+        public void DeleteUserReviews(string username)
+        {
+            var reviews = _context.Reviews.Where(x => x.Author == username);
+            _context.Reviews.RemoveRange(reviews);
+            _context.SaveChanges();
+        }
+        
         public void UpdateReview(Review review)
         {
             var reviewToUpdate = _context.Reviews.Find(review.Id);

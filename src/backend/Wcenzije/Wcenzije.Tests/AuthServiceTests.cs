@@ -15,11 +15,12 @@ public class AuthServiceTests
 {
     private readonly AuthService _authService;
     private readonly IUserRepository _userRepository = Substitute.For<IUserRepository>();
+    private readonly IReviewsRepository _reviewsRepository = Substitute.For<IReviewsRepository>();
     private readonly IConfiguration _configuration = Substitute.For<IConfiguration>();
     
     public AuthServiceTests()
     {
-        _authService = new AuthService(_userRepository, _configuration, Substitute.For<ILogger<AuthService>>());
+        _authService = new AuthService(_userRepository, _reviewsRepository, _configuration, Substitute.For<ILogger<AuthService>>());
     }
     
     [Fact]
@@ -29,7 +30,7 @@ public class AuthServiceTests
         _userRepository.FindByNameAsync(username).Returns(new User());
         
         var result = await _authService.Register("email", username, "pass");
-     
+        
         result.Status.Should().Be(ResultStatus.Failure);
         result.Message.Should().Be("User already exists.");
     }
@@ -43,7 +44,7 @@ public class AuthServiceTests
         _userRepository.CreateAsync(Arg.Any<User>(), "pass").Returns(IdentityResult.Failed());
         
         var result = await _authService.Register("email", username, "pass");
-     
+        
         result.Status.Should().Be(ResultStatus.Failure);
         result.Message.Should().Be("User creation failed.");
     }
@@ -59,7 +60,7 @@ public class AuthServiceTests
         _userRepository.CreateAsync(Arg.Do<User>(x => createdUser = x), password).Returns(IdentityResult.Success);
         
         var result = await _authService.Register(email, username, password);
-     
+        
         result.Status.Should().Be(ResultStatus.Ok);
         result.Message.Should().Be("User created successfully!");
         
@@ -76,7 +77,7 @@ public class AuthServiceTests
         _userRepository.FindByNameAsync(username).Returns((User)null);
         
         var result = await _authService.Login(username, "pass");
-     
+        
         result.Status.Should().Be(ResultStatus.Unauthorized);
     }
     
@@ -88,13 +89,13 @@ public class AuthServiceTests
         _userRepository.CheckPasswordAsync(user, "pass").Returns(false);
         
         var result = await _authService.Login(user.UserName, "pass");
-     
+        
         result.Status.Should().Be(ResultStatus.Unauthorized);
     }
     
     [Theory]
     [InlineData(null, "issuer", "audience")]
-    [InlineData("secret", null, "audience")] 
+    [InlineData("secret", null, "audience")]
     [InlineData("secret", "issuer", null)]
     public async Task Login_MissingConfig_ThrowsException(string secret, string issuer, string audience)
     {
@@ -128,7 +129,7 @@ public class AuthServiceTests
     [Fact]
     public async Task Login_ValidCredentials_ReturnsOk()
     {
-        var user = new User { UserName = "test", UserRoles = []};
+        var user = new User { UserName = "test", UserRoles = [] };
         _userRepository.FindByNameAsync(user.UserName).Returns(user);
         _userRepository.CheckPasswordAsync(user, "pass").Returns(true);
         _configuration["JWT:Secret"].Returns("a secret longer than 16 characters");
@@ -136,7 +137,7 @@ public class AuthServiceTests
         _configuration["JWT:ValidAudience"].Returns("audience");
         
         var result = await _authService.Login(user.UserName, "pass");
-     
+        
         result.Status.Should().Be(ResultStatus.Ok);
         result.Value.Token.Should().NotBeNullOrWhiteSpace();
         result.Value.Expiration.Should().BeAfter(DateTime.UtcNow);
@@ -145,7 +146,7 @@ public class AuthServiceTests
     [Fact]
     public async Task Login_ShouldAddUserClaims()
     {
-        var user = new User { UserName = "test", UserRoles = ["role1", "role2"]};
+        var user = new User { UserName = "test", UserRoles = ["role1", "role2"] };
         _userRepository.FindByNameAsync(user.UserName).Returns(user);
         _userRepository.CheckPasswordAsync(user, "pass").Returns(true);
         _configuration["JWT:Secret"].Returns("a secret longer than 16 characters");
@@ -153,14 +154,15 @@ public class AuthServiceTests
         _configuration["JWT:ValidAudience"].Returns("audience");
         
         var result = await _authService.Login(user.UserName, "pass");
-     
+        
         var token = new JwtSecurityTokenHandler().ReadJwtToken(result.Value.Token);
         token.Claims.Should().ContainSingle(x => x.Type == ClaimTypes.Name && x.Value == user.UserName);
-        token.Claims.Should().ContainSingle(x => x.Type == JwtRegisteredClaimNames.Jti && !string.IsNullOrWhiteSpace(x.Value));
+        token.Claims.Should()
+            .ContainSingle(x => x.Type == JwtRegisteredClaimNames.Jti && !string.IsNullOrWhiteSpace(x.Value));
         token.Claims.Should().ContainSingle(x => x.Type == "Role" && x.Value == "role1");
         token.Claims.Should().ContainSingle(x => x.Type == "Role" && x.Value == "role2");
     }
-
+    
     [Fact]
     public async Task DeleteAccount_UserNotFound_ReturnsUnauthorized()
     {
@@ -168,7 +170,7 @@ public class AuthServiceTests
         _userRepository.FindByNameAsync(username).Returns((User)null);
         
         var result = await _authService.DeleteAccount(username);
-     
+        
         result.Status.Should().Be(ResultStatus.Unauthorized);
     }
     
@@ -180,7 +182,7 @@ public class AuthServiceTests
         _userRepository.DeleteAsync(user).Returns(IdentityResult.Failed());
         
         var result = await _authService.DeleteAccount(user.UserName);
-     
+        
         result.Status.Should().Be(ResultStatus.Failure);
         result.Message.Should().Be("Account deletion failed.");
     }
@@ -193,7 +195,8 @@ public class AuthServiceTests
         _userRepository.DeleteAsync(user).Returns(IdentityResult.Success);
         
         var result = await _authService.DeleteAccount(user.UserName);
-     
+        
+        _reviewsRepository.Received(1).DeleteUserReviews(user.UserName);
         result.Status.Should().Be(ResultStatus.Ok);
         result.Message.Should().Be("User account deleted successfully!");
     }

@@ -11,7 +11,11 @@ using Wcenzije.Domain.Repositories;
 
 namespace Wcenzije.Domain.Services;
 
-public class AuthService(IUserRepository userRepository, IConfiguration configuration, ILogger<AuthService> logger) : IAuthService
+public class AuthService(
+    IUserRepository userRepository,
+    IReviewsRepository reviewsRepo,
+    IConfiguration configuration,
+    ILogger<AuthService> logger) : IAuthService
 {
     public async Task<Result> Register(string email, string username, string password)
     {
@@ -71,6 +75,8 @@ public class AuthService(IUserRepository userRepository, IConfiguration configur
         {
             return Result.Unauthorized();
         }
+        
+        reviewsRepo.DeleteUserReviews(username);
         
         var result = await userRepository.DeleteAsync(user);
         if (result.Succeeded == false)

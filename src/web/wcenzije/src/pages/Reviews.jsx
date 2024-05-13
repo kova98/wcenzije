@@ -22,7 +22,7 @@ const Reviews = ({ setToken }) => {
         }
         setIsLoaded(true);
         setError(error);
-      }
+      },
     );
   }, []);
 
@@ -68,7 +68,7 @@ const Reviews = ({ setToken }) => {
                             name="rating-10"
                             className="bg-yellow-500 mask mask-star-2 mask-half-2"
                           />
-                        )
+                        ),
                       )}
                     </div>
                   </div>

@@ -18,5 +18,8 @@ services:
     ports: 
       - 8002:5000
     environment:
-      - ConnectionString=${ConnectionString}
       - PORT=5000
+      - ConnectionString=${ConnectionString}
+      - JWT__ValidAudience=${JWT__ValidAudience}
+      - JWT__ValidIssuer=${JWT__ValidIssuer}
+      - JWT__Secret=${JWT__Secret}

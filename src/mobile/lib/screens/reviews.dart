@@ -6,6 +6,7 @@ import 'package:wcenzije/screens/review.dart';
 
 class ReviewsScreen extends StatelessWidget {
   List<Review> reviews;
+  // TODO: refactor to load reviews from the API
 
   ReviewsScreen(this.reviews, {Key? key}) : super(key: key);
 
@@ -20,7 +21,7 @@ class ReviewsScreen extends StatelessWidget {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ReviewScreen(reviews[index]),
+              builder: (context) => ReviewScreen(reviews[index].id),
             ),
           ),
           child: Card(

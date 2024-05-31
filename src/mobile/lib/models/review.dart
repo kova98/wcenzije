@@ -33,8 +33,8 @@ class Review {
 
   Review.fromJson(Map<String, dynamic> parsedJson)
       : id = parsedJson['id'],
-        imageUrls = parsedJson['imageUrls'].cast<String>(),
-        content = parsedJson['content'],
+        imageUrls = parsedJson['imageUrls']?.cast<String>() ?? [],
+        content = parsedJson['content'] ?? "",
         likeCount = parsedJson['likeCount'] ?? 0,
         rating = parsedJson['rating'] ?? 0,
         location = parsedJson['location'] ?? "",
@@ -42,10 +42,10 @@ class Review {
         gender = Gender.values[parsedJson['gender'] ?? 0],
         qualities = Qualities.fromJson(parsedJson['qualities'] ?? {}),
         dateCreated =
-            DateTime.tryParse(parsedJson['dateCreated']) ?? DateTime(0),
-        dateUpdated = DateTime.tryParse(parsedJson['dateUpdated']),
+            DateTime.tryParse(parsedJson['dateCreated'] ?? "") ?? DateTime(0),
+        dateUpdated = DateTime.tryParse(parsedJson['dateUpdated'] ?? ""),
         isAnonymous = parsedJson['isAnonymous'] ?? false,
-        author = parsedJson['author'];
+        author = parsedJson['author'] ?? "";
 
   Map<String, dynamic> toMap() => <String, dynamic>{
         "id": id,

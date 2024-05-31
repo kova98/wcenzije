@@ -9,11 +9,12 @@ import 'package:wcenzije/services/compressor.dart';
 
 class ReviewsRepository {
   final String _root = "${Config().apiRoot}/review";
+  final String _rootV2 = "${Config().apiRoot}/v2/review";
   final _authService = AuthService();
   final _compressorService = CompressorService();
 
   Future<List<Review>> getReviews() async {
-    final response = await http.get(Uri.parse(_root));
+    final response = await http.get(Uri.parse(_rootV2));
 
     if (response.statusCode != 200) {
       throw Exception('Failed to fetch reviews');
@@ -72,16 +73,9 @@ class ReviewsRepository {
   }
 
   Future<List<Review>> getReviewsByAuthor(String author) async {
-    var authToken = await _authService.getAuthToken();
-
-    var headers = <String, String>{
-      'Content-Type': 'application/json; charset=utf-8',
-      'Authorization': 'Bearer $authToken'
-    };
-
     final response = await http.get(
       Uri.parse("$_root/author/$author"),
-      headers: headers,
+      headers: await getHeaders(),
     );
 
     if (response.statusCode == 401) {
@@ -97,5 +91,36 @@ class ReviewsRepository {
     final reviewsList = reviews.map((item) => Review.fromJson(item)).toList();
 
     return reviewsList;
+  }
+
+  Future<Review?> getReview(num reviewId) async {
+    final response = await http.get(
+      Uri.parse("$_root/$reviewId"),
+      headers: await getHeaders(),
+    );
+
+    if (response.statusCode == 401) {
+      _authService.logout();
+      return null;
+    }
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch review');
+    }
+
+    final review = Review.fromJson(json.decode(response.body));
+
+    return review;
+  }
+
+  Future<Map<String, String>> getHeaders() async {
+    var authToken = await _authService.getAuthToken();
+
+    var headers = <String, String>{
+      'Content-Type': 'application/json; charset=utf-8',
+      'Authorization': 'Bearer $authToken'
+    };
+
+    return headers;
   }
 }

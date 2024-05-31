@@ -74,7 +74,7 @@ class _MapState extends State<Map> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => toilet.reviews.length == 1
-                      ? ReviewScreen(toilet.reviews[0])
+                      ? ReviewScreen(toilet.reviews[0].id)
                       : ReviewsScreen(sortByDate(toilet.reviews)),
                 ),
               )

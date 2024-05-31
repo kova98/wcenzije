@@ -60,7 +60,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 title(),
                 const Padding(padding: EdgeInsets.all(8)),
                 ratingBar(),
-                ...nameAndDate(),
+                Icon(_review.gender.icon(), color: Colors.white, size: 32),
+                const Padding(padding: EdgeInsets.all(8)),
+                nameAndDate(),
                 const Padding(padding: EdgeInsets.all(8)),
                 qualities(),
                 const Padding(padding: EdgeInsets.all(4)),
@@ -78,22 +80,20 @@ class _ReviewScreenState extends State<ReviewScreen> {
     );
   }
 
-  List<Widget> nameAndDate() {
-    return [
-      Center(
-        child: Text(
-          _review.author ?? "anonimni korisnik",
+  Widget nameAndDate() {
+    return Column(
+      children: [
+        Text(
+          (_review.author ?? "") != "" ? _review.author! : "anonimni korisnik",
           style: const TextStyle(color: Colors.white),
         ),
-      ),
-      const Padding(padding: EdgeInsets.all(2)),
-      Center(
-        child: Text(
+        const Padding(padding: EdgeInsets.all(2)),
+        Text(
           shortDate(_review.dateCreated),
           style: const TextStyle(color: Colors.white70),
         ),
-      ),
-    ];
+      ],
+    );
   }
 
   Widget whiteText(String text) {

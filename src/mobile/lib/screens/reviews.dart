@@ -33,7 +33,7 @@ class ReviewsScreen extends StatelessWidget {
                 children: [
                   Icon(
                     reviews[index].gender.icon(),
-                    color: reviews[index].gender.color(),
+                    color: Colors.blue,
                     size: 32,
                   ),
                 ],

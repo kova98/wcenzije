@@ -34,4 +34,15 @@ extension GenderHelpers on Gender {
         return Icons.people;
     }
   }
+
+  String adjective() {
+    switch (this) {
+      case Gender.male:
+        return "muški";
+      case Gender.female:
+        return "ženski";
+      case Gender.unisex:
+        return "unisex";
+    }
+  }
 }

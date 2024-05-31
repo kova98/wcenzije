@@ -44,7 +44,7 @@ class _MapState extends State<Map> {
   Widget build(BuildContext context) {
     final _initialCameraPosition = CameraPosition(
       target: LatLng(widget.position.latitude, widget.position.longitude),
-      zoom: 18,
+      zoom: 15,
     );
 
     return Scaffold(

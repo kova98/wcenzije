@@ -2,7 +2,8 @@ name: Mobile Deployment
 
 on:
   push:
-    branches: [ "main" ]
+  pull_request:
+    branches: [ "main", "feat/mobile-pipeline" ]
     paths: ['src/mobile/**']
   workflow_dispatch:
 

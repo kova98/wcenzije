@@ -15,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IReviewsRepository, ReviewsRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IImageUploadService, CloudinaryImageUploadService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.SetupAndAddDbContext(builder.Configuration);
 builder.Services.AddCorsForAnyOrigin(CorsPolicy);
 

@@ -44,7 +44,11 @@ public static class Setup
             .AddIdentity<User, IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
-
+        
+        var issuer = builder.Configuration.TryGet("JWT:ValidIssuer");
+        var audience = builder.Configuration.TryGet("JWT:ValidAudience");
+        var jwtSecret = builder.Configuration.TryGet("JWT:Secret");
+        
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -59,9 +63,10 @@ public static class Setup
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
-                ValidAudience = builder.Configuration["JWT:ValidAudience"],
-                ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
+                
+                ValidAudience = audience,
+                ValidIssuer = issuer,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
             };
         });
 

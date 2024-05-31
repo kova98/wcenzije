@@ -22,6 +22,8 @@ jobs:
       with:
         channel: stable
         flutter-version-file: src/mobile/pubspec.yaml 
-    - run: flutter --version
+    - run: |
+        git config --global --add safe.directory /opt/hostedtoolcache/flutter/stable-3.3.10-x64
+        flutter --version
           
       

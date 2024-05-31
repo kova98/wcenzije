@@ -39,38 +39,45 @@ class ProfileScreen extends StatelessWidget {
                       },
                       icon: Icon(Icons.logout))
                 ]),
-                body: ListView.builder(
-                  itemCount: snapshot.data!.reviews.length,
-                  itemBuilder: (context, index) => InkWell(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ReviewScreen(snapshot.data!.reviews[index]),
-                      ),
-                    ),
-                    child: Card(
-                      child: ListTile(
-                        title: Text(snapshot.data!.reviews[index].name),
-                        subtitle: Text(shortDate(
-                            snapshot.data!.reviews[index].dateCreated)),
-                        leading: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              snapshot.data!.reviews[index].gender.icon(),
-                              color:
-                                  snapshot.data!.reviews[index].gender.color(),
-                              size: 32,
-                            ),
-                          ],
+                body: snapshot.data!.reviews.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'Nemaš objavljenih wcenzija.',
+                          textAlign: TextAlign.center,
                         ),
-                        trailing:
-                            Text("${snapshot.data!.reviews[index].rating}/10"),
-                      ),
-                    ),
-                  ),
-                ))
+                      )
+                    : ListView.builder(
+                        itemCount: snapshot.data!.reviews.length,
+                        itemBuilder: (context, index) => InkWell(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReviewScreen(
+                                  snapshot.data!.reviews[index].id),
+                            ),
+                          ),
+                          child: Card(
+                            child: ListTile(
+                              title: Text(snapshot.data!.reviews[index].name),
+                              subtitle: Text(shortDate(
+                                  snapshot.data!.reviews[index].dateCreated)),
+                              leading: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    snapshot.data!.reviews[index].gender.icon(),
+                                    color: snapshot.data!.reviews[index].gender
+                                        .color(),
+                                    size: 32,
+                                  ),
+                                ],
+                              ),
+                              trailing: Text(
+                                  "${snapshot.data!.reviews[index].rating}/10"),
+                            ),
+                          ),
+                        ),
+                      ))
             : Center(child: CircularProgressIndicator());
       },
     );

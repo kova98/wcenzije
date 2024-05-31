@@ -38,7 +38,8 @@ class PermissionScreen extends StatelessWidget {
                             (route) => false)),
                 child: const Text('DOZVOLI PRISTUP LOKACIJI'),
                 style: TextButton.styleFrom(
-                    primary: Colors.blue, backgroundColor: Colors.white),
+                    foregroundColor: Colors.blue,
+                    backgroundColor: Colors.white),
               )
             ],
           ),

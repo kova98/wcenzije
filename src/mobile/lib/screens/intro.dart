@@ -51,7 +51,7 @@ class _IntroScreenState extends State<IntroScreen> {
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Srao si?",
+          title: "Srao/la si?",
           body:
               "Napiši wcenziju, ubaci par fotki i podijeli iskustvo s ostalima.",
           image: _buildImage('photo.png'),

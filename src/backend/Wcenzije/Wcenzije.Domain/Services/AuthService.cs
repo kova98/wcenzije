@@ -98,7 +98,7 @@ public class AuthService(
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
         
-        foreach (var role in user.UserRoles)
+        foreach (var role in user.UserRoles ?? [])
         {
             authClaims.Add(new Claim("Role", role));
         }

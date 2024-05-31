@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class CompressorService {
@@ -14,12 +12,7 @@ class CompressorService {
       quality: 80,
     );
     if (result == null) throw new Exception("compress failed");
-    print('src, path = $srcPath length = ${File(srcPath).lengthSync()}');
-    print(
-      'Compress webp result path: ${result.absolute.path}, '
-      'size: ${result.lengthSync()}',
-    );
 
-    return result.absolute.path;
+    return result.path;
   }
 }

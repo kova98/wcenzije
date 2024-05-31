@@ -28,6 +28,7 @@ class AddReviewContentScreen extends StatefulWidget {
 class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
   final repo = ReviewsRepository();
   final authService = AuthService();
+  Color textColor = Colors.blue[700] ?? Colors.blue;
 
   bool ratingValid = true;
   String contentText = '';
@@ -40,15 +41,12 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
   Gender gender = Gender.unisex;
   List<XFile> images = [];
 
-  Color color = Colors.green;
-  Color accentColor = Colors.greenAccent;
-
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
-      backgroundColor: color,
+      backgroundColor: Colors.blue,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Form(
@@ -78,7 +76,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
 
   UnderlineInputBorder coloredBorder() {
     return UnderlineInputBorder(
-      borderSide: BorderSide(color: color),
+      borderSide: BorderSide(color: textColor),
     );
   }
 
@@ -107,7 +105,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
           validator: contentValidator,
           decoration: InputDecoration(
             labelText: 'Osvrt',
-            labelStyle: TextStyle(color: color),
+            labelStyle: TextStyle(color: textColor),
             focusedBorder: coloredBorder(),
           ),
         ),
@@ -138,8 +136,8 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
             child: ElevatedButton(
               onPressed: () => submit(_formKey),
               child: Text(
-                'Objavi',
-                style: TextStyle(color: color),
+                isAnonymous ? 'Objavi anonimno' : 'Objavi',
+                style: TextStyle(color: textColor),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
@@ -154,7 +152,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
               ),
               child: Icon(
                 FontAwesomeIcons.userSecret,
-                color: isAnonymous ? color : Colors.grey,
+                color: isAnonymous ? textColor : Colors.grey,
               ),
               onPressed: () {
                 setState(() {
@@ -172,8 +170,8 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     return Row(
       children: [
         Switch(
-          activeTrackColor: accentColor,
-          activeColor: color,
+          activeTrackColor: textColor,
+          activeColor: textColor,
           value: value,
           onChanged: (val) => setState(() {
             updateCallback(val);
@@ -183,14 +181,14 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
           width: 30,
           child: FaIcon(
             icon,
-            color: value ? color : Colors.grey,
+            color: value ? textColor : Colors.grey,
           ),
         ),
         const Padding(padding: EdgeInsets.all(8)),
         value
             ? Text(
                 positiveMsg,
-                style: TextStyle(color: color),
+                style: TextStyle(color: textColor),
               )
             : Text(
                 positiveMsg,
@@ -256,14 +254,14 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
                 const Spacer(),
                 Icon(
                   Icons.collections,
-                  color: color,
+                  color: textColor,
                   size: 40,
                 ),
                 if (images.isEmpty) ...[
                   const Spacer(),
                   Text(
                     "Dodaj fotografije",
-                    style: TextStyle(color: color),
+                    style: TextStyle(color: textColor),
                   ),
                   const Spacer()
                 ],
@@ -271,31 +269,6 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  // TODO: add this back in
-  Widget imageDisplay() {
-    return Card(
-      child: Container(
-        height: 100.0,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: images.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Container(
-                width: 100,
-                child: Image.file(
-                  File(images[index].path),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            );
-          },
         ),
       ),
     );
@@ -309,7 +282,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     return images.length > 0
         ? [
             const Spacer(),
-            Text(text, style: TextStyle(color: color)),
+            Text(text, style: TextStyle(color: textColor)),
             const Spacer()
           ]
         : [const Spacer()];
@@ -364,31 +337,25 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
         builder: (context, constraints) => ToggleButtons(
           constraints: BoxConstraints.expand(
             width: constraints.maxWidth / 3 - 1.5,
-            height: 50,
+            height: 60,
           ),
           selectedBorderColor: Colors.transparent,
           borderColor: Colors.transparent,
-          children: const <Widget>[
-            Icon(Icons.male, color: Colors.blue, size: 30),
-            Icon(Icons.people, color: Colors.green, size: 30),
-            Icon(Icons.female, color: Colors.pink, size: 30),
-          ],
           onPressed: (int index) {
             setState(() {
               setSelected(index);
               setGender(index);
-              setColor();
             });
           },
           isSelected: isSelected,
+          children: <Widget>[
+            genderButton(0, Icons.male, 'muški'),
+            genderButton(1, Icons.people, 'unisex'),
+            genderButton(2, Icons.female, 'ženski'),
+          ],
         ),
       ),
     );
-  }
-
-  void setColor() {
-    color = gender.color();
-    accentColor = gender.accentColor();
   }
 
   void setSelected(int index) {
@@ -507,5 +474,19 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
         );
       }
     }
+  }
+
+  genderButton(int index, IconData icon, String title) {
+    var selected = isSelected[index];
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(icon, color: selected ? textColor : Colors.grey, size: 30),
+        Text(
+          title,
+          style: TextStyle(color: selected ? textColor : Colors.grey),
+        ),
+      ],
+    );
   }
 }

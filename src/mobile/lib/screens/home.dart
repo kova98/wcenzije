@@ -27,77 +27,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 5,
-        color: Colors.blue,
-        child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                icon: Icon(
-                  _selectedScreen == 0 ? Icons.home : Icons.home_outlined,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _selectedScreen = 0;
-                  });
-                },
-              ),
-              Padding(padding: EdgeInsets.all(1)),
-              IconButton(
-                icon: Icon(
-                  _selectedScreen == 1 ? Icons.person : Icons.person_outline,
-                  color: Colors.white,
-                  size: 30,
-                ),
-                onPressed: () async {
-                  final isAuthorized = await authService.isAuthorized();
-                  if (!isAuthorized) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginScreen(HomeScreen()),
-                      ),
-                    );
-                    return;
-                  }
-                  setState(() {
-                    _selectedScreen = 1;
-                  });
-                },
-              ),
-            ]),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () async {
-          final isAuthorized = await authService.isAuthorized();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => isAuthorized
-                  ? AddReviewWhereScreen()
-                  : LoginScreen(AddReviewWhereScreen()),
-            ),
-          );
-        },
-      ),
-      body: FutureBuilder<bool>(
-        future: isLocationEnabled(),
-        builder: (context, snapshot) => snapshot.hasData
-            ? snapshot.data!
-                ? _selectedScreen == 0
-                    ? map()
-                    : ProfileScreen()
-                : const PermissionScreen()
-            : const CircularProgressIndicator(),
-      ),
+    return FutureBuilder<bool>(
+      future: isLocationEnabled(),
+      builder: (context, snapshot) => snapshot.hasData
+          ? snapshot.data! // location is enabled
+              ? scaffold()
+              : const PermissionScreen()
+          : const CircularProgressIndicator(),
     );
   }
 
@@ -132,6 +68,70 @@ class _HomeScreenState extends State<HomeScreen> {
         child: CircularProgressIndicator(
           color: Colors.white,
         ),
+      );
+
+  scaffold() => Scaffold(
+        extendBody: true,
+        bottomNavigationBar: BottomAppBar(
+          shape: CircularNotchedRectangle(),
+          notchMargin: 5,
+          color: Colors.blue,
+          child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    _selectedScreen == 0 ? Icons.home : Icons.home_outlined,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _selectedScreen = 0;
+                    });
+                  },
+                ),
+                Padding(padding: EdgeInsets.all(1)),
+                IconButton(
+                  icon: Icon(
+                    _selectedScreen == 1 ? Icons.person : Icons.person_outline,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  onPressed: () async {
+                    final isAuthorized = await authService.isAuthorized();
+                    if (!isAuthorized) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(HomeScreen()),
+                        ),
+                      );
+                      return;
+                    }
+                    setState(() {
+                      _selectedScreen = 1;
+                    });
+                  },
+                ),
+              ]),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () async {
+            final isAuthorized = await authService.isAuthorized();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => isAuthorized
+                    ? AddReviewWhereScreen()
+                    : LoginScreen(AddReviewWhereScreen()),
+              ),
+            );
+          },
+        ),
+        body: _selectedScreen == 0 ? map() : ProfileScreen(),
       );
 }
 

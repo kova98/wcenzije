@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
-import { Home, Reviews, Admin } from "./pages";
+import { Home, Reviews, Admin, DeleteAccount } from "./pages";
 import axios from "axios";
 
 import "./App.css";
@@ -20,6 +20,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/delete-account" element={<DeleteAccount />} />
           <Route
             path="/admin"
             element={<Admin setToken={setToken} token={token} />}

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wcenzije.Domain.Entities;
+using Wcenzije.Domain.Models;
 using Wcenzije.Domain.Repositories;
 
 namespace Wcenzije.Persistence.Repositories
@@ -55,6 +56,18 @@ namespace Wcenzije.Persistence.Repositories
             var reviews = _context.Reviews.Where(x => x.Author == username);
             _context.Reviews.RemoveRange(reviews);
             _context.SaveChanges();
+        }
+        
+        public List<SimpleReview> GetReviewsSimple()
+        {
+            return _context.Reviews
+                .Select(x => new SimpleReview
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Location = x.Location,
+                })
+                .ToList();
         }
         
         public void UpdateReview(Review review)

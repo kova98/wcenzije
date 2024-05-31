@@ -11,7 +11,7 @@ namespace Wcenzije.Domain.Entities
         public string Content { get; set; }
         public string Name { get; set; }
         public string Location { get; set; }
-        public string Author { get; set; }
+        public string? Author { get; set; }
         public bool IsAnonymous { get; set; }
         public int LikeCount { get; set; }
         public int Rating { get; set; }

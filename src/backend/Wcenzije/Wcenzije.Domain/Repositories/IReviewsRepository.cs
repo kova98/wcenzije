@@ -1,4 +1,5 @@
 ﻿using Wcenzije.Domain.Entities;
+using Wcenzije.Domain.Models;
 
 namespace Wcenzije.Domain.Repositories;
 
@@ -11,4 +12,5 @@ public interface IReviewsRepository
     void DeleteReview(long id);
     List<Review> GetReviewsByAuthor(string user);
     void DeleteUserReviews(string username);
+    List<SimpleReview> GetReviewsSimple();
 }

@@ -1,8 +1,6 @@
 name: Deploy Backend And Web Frontend
 
 on:
-  push:
-    branches: ["feat/deploy-pipeline"]
   workflow_dispatch:
 
 jobs:

@@ -28,7 +28,6 @@ class AddReviewContentScreen extends StatefulWidget {
 class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
   final repo = ReviewsRepository();
   final authService = AuthService();
-  Color textColor = Colors.blue[700] ?? Colors.blue;
 
   bool ratingValid = true;
   String contentText = '';
@@ -40,10 +39,12 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
   bool isAnonymous = false;
   Gender gender = Gender.unisex;
   List<XFile> images = [];
+  Color darkColor = Colors.blue;
 
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
+    darkColor = Theme.of(context).primaryColorDark;
 
     return Scaffold(
       backgroundColor: Colors.blue,
@@ -76,7 +77,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
 
   UnderlineInputBorder coloredBorder() {
     return UnderlineInputBorder(
-      borderSide: BorderSide(color: textColor),
+      borderSide: BorderSide(color: darkColor),
     );
   }
 
@@ -105,7 +106,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
           validator: contentValidator,
           decoration: InputDecoration(
             labelText: 'Osvrt',
-            labelStyle: TextStyle(color: textColor),
+            labelStyle: TextStyle(color: darkColor),
             focusedBorder: coloredBorder(),
           ),
         ),
@@ -137,7 +138,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
               onPressed: () => submit(_formKey),
               child: Text(
                 isAnonymous ? 'Objavi anonimno' : 'Objavi',
-                style: TextStyle(color: textColor),
+                style: TextStyle(color: darkColor),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
@@ -152,7 +153,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
               ),
               child: Icon(
                 FontAwesomeIcons.userSecret,
-                color: isAnonymous ? textColor : Colors.grey,
+                color: isAnonymous ? darkColor : Colors.grey,
               ),
               onPressed: () {
                 setState(() {
@@ -170,8 +171,8 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     return Row(
       children: [
         Switch(
-          activeTrackColor: textColor,
-          activeColor: textColor,
+          activeTrackColor: darkColor,
+          activeColor: darkColor,
           value: value,
           onChanged: (val) => setState(() {
             updateCallback(val);
@@ -181,14 +182,14 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
           width: 30,
           child: FaIcon(
             icon,
-            color: value ? textColor : Colors.grey,
+            color: value ? darkColor : Colors.grey,
           ),
         ),
         const Padding(padding: EdgeInsets.all(8)),
         value
             ? Text(
                 positiveMsg,
-                style: TextStyle(color: textColor),
+                style: TextStyle(color: darkColor),
               )
             : Text(
                 positiveMsg,
@@ -254,14 +255,14 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
                 const Spacer(),
                 Icon(
                   Icons.collections,
-                  color: textColor,
+                  color: darkColor,
                   size: 40,
                 ),
                 if (images.isEmpty) ...[
                   const Spacer(),
                   Text(
                     "Dodaj fotografije",
-                    style: TextStyle(color: textColor),
+                    style: TextStyle(color: darkColor),
                   ),
                   const Spacer()
                 ],
@@ -282,7 +283,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     return images.length > 0
         ? [
             const Spacer(),
-            Text(text, style: TextStyle(color: textColor)),
+            Text(text, style: TextStyle(color: darkColor)),
             const Spacer()
           ]
         : [const Spacer()];
@@ -481,10 +482,10 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(icon, color: selected ? textColor : Colors.grey, size: 30),
+        Icon(icon, color: selected ? darkColor : Colors.grey, size: 30),
         Text(
           title,
-          style: TextStyle(color: selected ? textColor : Colors.grey),
+          style: TextStyle(color: selected ? darkColor : Colors.grey),
         ),
       ],
     );

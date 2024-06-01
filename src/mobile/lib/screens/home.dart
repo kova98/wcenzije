@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<MapData> loadMapData() async {
-    final reviews = await repo.getReviews();
+    final reviews = await repo.getReviewsForMap();
     final location = await determinePosition();
 
     return MapData(reviews, location);

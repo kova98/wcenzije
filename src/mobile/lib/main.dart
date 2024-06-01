@@ -21,6 +21,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        primaryColorDark: Colors.blue[700],
         useMaterial3: false,
       ),
       title: 'Wcenzije',

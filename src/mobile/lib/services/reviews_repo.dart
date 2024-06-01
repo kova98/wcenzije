@@ -13,8 +13,8 @@ class ReviewsRepository {
   final _authService = AuthService();
   final _compressorService = CompressorService();
 
-  Future<List<Review>> getReviews() async {
-    final response = await http.get(Uri.parse(_rootV2));
+  Future<List<Review>> getReviewsForMap() async {
+    final response = await http.get(Uri.parse("$_rootV2/map"));
 
     if (response.statusCode != 200) {
       throw Exception('Failed to fetch reviews');
@@ -22,6 +22,22 @@ class ReviewsRepository {
 
     final reviews = json.decode(response.body) as List;
     final reviewsList = reviews.map((item) => Review.fromJson(item)).toList();
+
+    return reviewsList;
+  }
+
+  Future<List<Review>> getReviews(List<int> ids) async {
+    final query = "?ids=${ids.join(",")}";
+    final response = await http.get(Uri.parse(_rootV2 + query));
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch reviews');
+    }
+
+    final reviews = json.decode(response.body);
+    final dynamicList = reviews["reviews"] as List;
+    final reviewsList =
+        dynamicList.map((item) => Review.fromJson(item)).toList();
 
     return reviewsList;
   }

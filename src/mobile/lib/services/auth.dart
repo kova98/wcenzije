@@ -6,10 +6,10 @@ import 'package:wcenzije/models/token.dart';
 import '../config.dart';
 
 class AuthService {
-  final String _root = Config().apiRoot + "/auth";
+  final String _root = "${Config().apiRoot}/auth";
   final _authStorageKey = "wcenzije_auth_token";
   final _usernameStorageKey = "wcenzije_username";
-  final _storage = FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage();
 
   Future<String?> getAuthToken() async {
     return await _storage.read(key: _authStorageKey);

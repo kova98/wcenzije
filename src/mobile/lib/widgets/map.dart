@@ -3,14 +3,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import "package:collection/collection.dart";
 import 'package:wcenzije/models/review.dart';
-import 'package:wcenzije/screens/login.dart';
 import 'package:wcenzije/screens/review.dart';
 import 'package:wcenzije/screens/reviews.dart';
 import 'package:wcenzije/services/auth.dart';
 
 import '../helpers/assets_helper.dart';
 import '../helpers/google_maps_helper.dart';
-import '../screens/add_review/where.dart';
 
 class Map extends StatefulWidget {
   final List<Review>? reviews;
@@ -42,7 +40,7 @@ class _MapState extends State<Map> {
 
   @override
   Widget build(BuildContext context) {
-    final _initialCameraPosition = CameraPosition(
+    final initialCameraPosition = CameraPosition(
       target: LatLng(widget.position.latitude, widget.position.longitude),
       zoom: 15,
     );
@@ -54,7 +52,7 @@ class _MapState extends State<Map> {
         },
         myLocationButtonEnabled: true,
         zoomControlsEnabled: false,
-        initialCameraPosition: _initialCameraPosition,
+        initialCameraPosition: initialCameraPosition,
         markers: _getMarkers(context),
       ),
     );

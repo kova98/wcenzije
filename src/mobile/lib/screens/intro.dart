@@ -18,7 +18,7 @@ class _IntroScreenState extends State<IntroScreen> {
     await prefs.setBool('intro_completed', true);
 
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => HomeScreen()),
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
     );
   }
 

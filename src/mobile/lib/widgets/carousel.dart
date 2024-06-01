@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class Carousel extends StatefulWidget {
   final List<Image> images = [];
 
-  Carousel(List<String> imageUrls) {
+  Carousel(List<String> imageUrls, {Key? key}) : super(key: key) {
     images.addAll(imageUrls.map((e) => Image.network(e)));
   }
 
@@ -44,7 +44,7 @@ class CarouselState extends State<Carousel> {
             child: Container(
               width: 12.0,
               height: 12.0,
-              margin: EdgeInsets.symmetric(horizontal: 4.0),
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: (Theme.of(context).brightness == Brightness.dark

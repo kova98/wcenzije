@@ -11,7 +11,7 @@ class CompressorService {
       minWidth: 800,
       quality: 80,
     );
-    if (result == null) throw new Exception("compress failed");
+    if (result == null) throw Exception("compress failed");
 
     return result.path;
   }

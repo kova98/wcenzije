@@ -12,7 +12,7 @@ import 'add_review/where.dart';
 import 'login.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
   scaffold() => Scaffold(
         extendBody: true,
         bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
+          shape: const CircularNotchedRectangle(),
           notchMargin: 5,
           color: Colors.blue,
           child: Row(
@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     });
                   },
                 ),
-                Padding(padding: EdgeInsets.all(1)),
+                const Padding(padding: EdgeInsets.all(1)),
                 IconButton(
                   icon: Icon(
                     _selectedScreen == 1 ? Icons.person : Icons.person_outline,
@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginScreen(HomeScreen()),
+                          builder: (context) => const LoginScreen(HomeScreen()),
                         ),
                       );
                       return;
@@ -125,8 +125,8 @@ class _HomeScreenState extends State<HomeScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) => isAuthorized
-                    ? AddReviewWhereScreen()
-                    : LoginScreen(AddReviewWhereScreen()),
+                    ? const AddReviewWhereScreen()
+                    : const LoginScreen(AddReviewWhereScreen()),
               ),
             );
           },

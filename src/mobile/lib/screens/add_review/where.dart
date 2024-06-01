@@ -4,6 +4,8 @@ import 'package:wcenzije/screens/add_review/content.dart';
 import 'package:wcenzije/services/geolocator.dart';
 
 class AddReviewWhereScreen extends StatefulWidget {
+  const AddReviewWhereScreen({Key? key}) : super(key: key);
+
   @override
   _AddReviewWhereScreenState createState() => _AddReviewWhereScreenState();
 }
@@ -28,7 +30,7 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
       backgroundColor: Colors.blue,
       body: SafeArea(
         child: Container(
-          margin: EdgeInsets.only(right: 20, left: 20, top: 20),
+          margin: const EdgeInsets.only(right: 20, left: 20, top: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -85,7 +87,7 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
               Expanded(
                 child: predictions.isEmpty
                     ? Padding(
-                        padding: EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(top: 10),
                         child: Text(
                           'Ne nalazimo objekt "$searchQuery" u blizini.\n',
                           style: const TextStyle(
@@ -95,10 +97,10 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
                     : ListView.builder(
                         itemCount: predictions.length,
                         itemBuilder: (context, index) {
-                          final _name =
+                          final name =
                               predictions[index].name?.split(',').first;
 
-                          final _nameWithStreet = predictions[index]
+                          final nameWithStreet = predictions[index]
                                   .name
                                   ?.split(',')
                                   .take(2)
@@ -114,15 +116,15 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
                               ),
                             ),
                             title: Text(
-                              _nameWithStreet,
-                              style: TextStyle(color: Colors.white),
+                              nameWithStreet,
+                              style: const TextStyle(color: Colors.white),
                             ),
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => AddReviewContentScreen(
-                                      _name!, predictions[index].placeId!),
+                                      name!, predictions[index].placeId!),
                                 ),
                               );
                             },

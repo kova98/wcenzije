@@ -20,7 +20,7 @@ class ReviewsScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(),
             backgroundColor: Colors.white,
-            body: Center(
+            body: const Center(
               child: CircularProgressIndicator(
                 color: Colors.blue,
               ),

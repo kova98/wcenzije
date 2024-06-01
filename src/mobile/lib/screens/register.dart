@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:wcenzije/helpers/string_helper.dart';
-import 'package:wcenzije/screens/add_review/where.dart';
 import 'package:wcenzije/screens/login.dart';
 import 'package:wcenzije/services/auth.dart';
 
@@ -27,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: Colors.blue,
       body: Container(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
@@ -44,12 +43,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 textAlign: TextAlign.left,
               ),
             ),
-            Spacer(),
+            const Spacer(),
             _error == null
-                ? SizedBox.shrink()
+                ? const SizedBox.shrink()
                 : Text(
                     _error!,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
@@ -69,7 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
                 style: const TextStyle(color: Colors.black87),
                 decoration: InputDecoration(
-                  errorStyle: TextStyle(color: Colors.white),
+                  errorStyle: const TextStyle(color: Colors.white),
                   hintText: 'email',
                   prefixIcon: const Icon(Icons.email),
                   fillColor: Colors.white,
@@ -98,7 +97,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
                 style: const TextStyle(color: Colors.black87),
                 decoration: InputDecoration(
-                  errorStyle: TextStyle(color: Colors.white),
+                  errorStyle: const TextStyle(color: Colors.white),
                   hintText: 'ime',
                   prefixIcon: const Icon(Icons.person),
                   fillColor: Colors.white,
@@ -157,11 +156,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             RichText(
               text: TextSpan(
                 text: 'Imaš račun? ',
-                style: TextStyle(color: Colors.white70),
+                style: const TextStyle(color: Colors.white70),
                 children: <TextSpan>[
                   TextSpan(
                     text: 'Prijavi se!',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       decoration: TextDecoration.underline,
@@ -178,7 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -231,18 +230,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }
                 });
               },
-              child: _loading
-                  ? CircularProgressIndicator()
-                  : Text(
-                      'REGISTRIRAJ SE',
-                      style: TextStyle(color: Colors.blue),
-                    ),
               style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
                   ),
                   backgroundColor: Colors.white,
-                  minimumSize: Size(120, 50)),
+                  minimumSize: const Size(120, 50)),
+              child: _loading
+                  ? const CircularProgressIndicator()
+                  : const Text(
+                      'REGISTRIRAJ SE',
+                      style: TextStyle(color: Colors.blue),
+                    ),
             ),
           ],
         ),

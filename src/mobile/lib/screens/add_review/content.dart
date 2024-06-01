@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wcenzije/helpers/gender_helper.dart';
 import 'package:wcenzije/models/review.dart';
 import 'package:wcenzije/screens/add_review/where.dart';
 import 'package:wcenzije/screens/home.dart';
@@ -19,7 +16,8 @@ class AddReviewContentScreen extends StatefulWidget {
   final String name;
   final String placeId;
 
-  AddReviewContentScreen(this.name, this.placeId, {Key? key}) : super(key: key);
+  const AddReviewContentScreen(this.name, this.placeId, {Key? key})
+      : super(key: key);
 
   @override
   State<AddReviewContentScreen> createState() => _AddReviewContentScreenState();
@@ -43,7 +41,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     darkColor = Theme.of(context).primaryColorDark;
 
     return Scaffold(
@@ -51,7 +49,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: ListView(
             children: [
               const Padding(padding: EdgeInsets.all(16)),
@@ -67,7 +65,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
               const Padding(padding: EdgeInsets.all(2)),
               imagePicker(),
               const Padding(padding: EdgeInsets.all(2)),
-              submitButton(_formKey)
+              submitButton(formKey)
             ],
           ),
         ),
@@ -128,20 +126,20 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     );
   }
 
-  Widget submitButton(GlobalKey<FormState> _formKey) {
+  Widget submitButton(GlobalKey<FormState> formKey) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Row(
         children: [
           Expanded(
             child: ElevatedButton(
-              onPressed: () => submit(_formKey),
+              onPressed: () => submit(formKey),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+              ),
               child: Text(
                 isAnonymous ? 'Objavi anonimno' : 'Objavi',
                 style: TextStyle(color: darkColor),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
               ),
             ),
           ),
@@ -178,7 +176,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
             updateCallback(val);
           }),
         ),
-        Container(
+        SizedBox(
           width: 30,
           child: FaIcon(
             icon,
@@ -241,13 +239,13 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     return Card(
       child: InkWell(
         onTap: () async {
-          final ImagePicker _picker = ImagePicker();
-          final picked = await _picker.pickMultiImage() ?? [];
+          final ImagePicker picker = ImagePicker();
+          final picked = await picker.pickMultiImage() ?? [];
           setState(() {
             images = picked;
           });
         },
-        child: Container(
+        child: SizedBox(
           height: 100.0,
           child: Center(
             child: Column(
@@ -280,7 +278,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
         ? "${images.length} fotografije odabrane"
         : "${images.length} fotografija odabrana";
 
-    return images.length > 0
+    return images.isNotEmpty
         ? [
             const Spacer(),
             Text(text, style: TextStyle(color: darkColor)),
@@ -382,8 +380,8 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
     }
   }
 
-  void submit(_formKey) async {
-    if (_formKey.currentState!.validate()) {
+  void submit(formKey) async {
+    if (formKey.currentState!.validate()) {
       if (rating == 0) {
         setState(() {
           ratingValid = false;
@@ -431,7 +429,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => LoginScreen(AddReviewWhereScreen()),
+            builder: (context) => const LoginScreen(AddReviewWhereScreen()),
           ),
         );
         return;
@@ -449,7 +447,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
         Future.delayed(const Duration(seconds: 2), () {
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (_) => HomeScreen()),
+              MaterialPageRoute(builder: (_) => const HomeScreen()),
               (route) => false);
         });
 

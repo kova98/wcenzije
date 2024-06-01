@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:wcenzije/screens/add_review/where.dart';
 import 'package:wcenzije/screens/register.dart';
 import 'package:wcenzije/services/auth.dart';
 
@@ -25,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Colors.blue,
       body: Container(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,12 +42,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   textAlign: TextAlign.left,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               _error == null
-                  ? SizedBox.shrink()
+                  ? const SizedBox.shrink()
                   : Text(
                       _error!,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
               const Padding(padding: EdgeInsets.all(5)),
@@ -65,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   style: const TextStyle(color: Colors.black87),
                   decoration: InputDecoration(
-                    errorStyle: TextStyle(color: Colors.white),
+                    errorStyle: const TextStyle(color: Colors.white),
                     hintText: 'ime',
                     prefixIcon: const Icon(Icons.person),
                     fillColor: Colors.white,
@@ -124,11 +123,11 @@ class _LoginScreenState extends State<LoginScreen> {
               RichText(
                 text: TextSpan(
                   text: 'Nemaš račun? ',
-                  style: TextStyle(color: Colors.white70),
+                  style: const TextStyle(color: Colors.white70),
                   children: <TextSpan>[
                     TextSpan(
                       text: 'Registriraj se!',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         decoration: TextDecoration.underline,
@@ -145,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               ElevatedButton(
                 onPressed: () {
                   if (_username == null || _password == null) {
@@ -177,18 +176,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                   });
                 },
-                child: _loading
-                    ? CircularProgressIndicator()
-                    : Text(
-                        'PRIJAVA',
-                        style: TextStyle(color: Colors.blue),
-                      ),
                 style: OutlinedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
                     backgroundColor: Colors.white,
-                    minimumSize: Size(120, 50)),
+                    minimumSize: const Size(120, 50)),
+                child: _loading
+                    ? const CircularProgressIndicator()
+                    : const Text(
+                        'PRIJAVA',
+                        style: TextStyle(color: Colors.blue),
+                      ),
               ),
             ],
           ),

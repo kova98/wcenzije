@@ -34,10 +34,10 @@ class ProfileScreen extends StatelessWidget {
                         await _authService.logout();
                         Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (_) => HomeScreen()),
+                            MaterialPageRoute(builder: (_) => const HomeScreen()),
                             (route) => false);
                       },
-                      icon: Icon(Icons.logout))
+                      icon: const Icon(Icons.logout))
                 ]),
                 body: snapshot.data!.reviews.isEmpty
                     ? const Center(
@@ -79,7 +79,7 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                       ))
-            : Center(child: CircularProgressIndicator());
+            : const Center(child: CircularProgressIndicator());
       },
     );
   }

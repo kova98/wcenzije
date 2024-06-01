@@ -29,7 +29,7 @@ class App extends StatelessWidget {
         future: introCompleted(),
         builder: (context, snapshot) {
           return snapshot.hasData
-              ? ((snapshot.data ?? false) ? HomeScreen() : const IntroScreen())
+              ? ((snapshot.data ?? false) ? const HomeScreen() : const IntroScreen())
               : const CircularProgressIndicator();
         },
       ),

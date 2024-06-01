@@ -153,7 +153,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
           value
               ? Text(
                   positiveMsg,
-                  style: TextStyle(color: Colors.blue),
+                  style: const TextStyle(color: Colors.blue),
                 )
               : Text(
                   negativeMsg,
@@ -206,7 +206,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(5),
-        child: Container(
+        child: SizedBox(
           height: 300,
           child: Stack(
             children: [
@@ -238,6 +238,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(3.0),
                       child: Text(
@@ -245,10 +249,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
                         style:
                             const TextStyle(color: Colors.white, fontSize: 12),
                       ),
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(18),
                     ),
                   ),
                 ),

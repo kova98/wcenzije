@@ -34,12 +34,12 @@ class PermissionScreen extends StatelessWidget {
                             .showSnackBar(SnackBar(content: Text(value)))
                         : Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (_) => HomeScreen()),
+                            MaterialPageRoute(builder: (_) => const HomeScreen()),
                             (route) => false)),
-                child: const Text('DOZVOLI PRISTUP LOKACIJI'),
                 style: TextButton.styleFrom(
                     foregroundColor: Colors.blue,
                     backgroundColor: Colors.white),
+                child: const Text('DOZVOLI PRISTUP LOKACIJI'),
               )
             ],
           ),

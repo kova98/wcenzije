@@ -7,7 +7,7 @@ class AddReviewWhereScreen extends StatefulWidget {
   const AddReviewWhereScreen({Key? key}) : super(key: key);
 
   @override
-  _AddReviewWhereScreenState createState() => _AddReviewWhereScreenState();
+  State<AddReviewWhereScreen> createState() => _AddReviewWhereScreenState();
 }
 
 class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
@@ -164,7 +164,6 @@ class _AddReviewWhereScreenState extends State<AddReviewWhereScreen> {
       region: "hr",
       components: [Component("country", "hr")],
       strictbounds: true,
-      // TODO: limit to cafes, restaurants, etc
     );
     if (result != null && result.predictions != null && mounted) {
       setState(() {

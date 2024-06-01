@@ -8,7 +8,7 @@ import 'package:wcenzije/screens/reviews.dart';
 import 'package:wcenzije/services/auth.dart';
 
 import '../helpers/assets_helper.dart';
-import '../helpers/google_maps_helper.dart';
+import '../helpers/file_helper.dart';
 
 class Map extends StatefulWidget {
   final List<Review>? reviews;
@@ -46,14 +46,17 @@ class _MapState extends State<Map> {
     );
 
     return Scaffold(
-      body: GoogleMap(
-        onMapCreated: (GoogleMapController c) {
-          GoogleMapsHelper.changeMapMode(c, "assets/maps_style.json");
+      body: FutureBuilder<String>(
+        future: FileHelper.getJsonFile("assets/maps_style.json"),
+        builder: (context, snapshot) {
+          return GoogleMap(
+            style: snapshot.data,
+            myLocationButtonEnabled: true,
+            zoomControlsEnabled: false,
+            initialCameraPosition: initialCameraPosition,
+            markers: _getMarkers(context),
+          );
         },
-        myLocationButtonEnabled: true,
-        zoomControlsEnabled: false,
-        initialCameraPosition: initialCameraPosition,
-        markers: _getMarkers(context),
       ),
     );
   }

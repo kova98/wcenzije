@@ -240,7 +240,7 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
       child: InkWell(
         onTap: () async {
           final ImagePicker picker = ImagePicker();
-          final picked = await picker.pickMultiImage() ?? [];
+          final picked = await picker.pickMultiImage();
           setState(() {
             images = picked;
           });
@@ -409,39 +409,47 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
           ),
           isAnonymous: isAnonymous);
 
-      showDialog(
-        context: context,
-        builder: (_) => Material(
-          type: MaterialType.transparency,
-          child: Scaffold(
-            backgroundColor: Colors.black.withAlpha(100),
-            body: const Center(
-              child: CircularProgressIndicator(),
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (_) => Material(
+            type: MaterialType.transparency,
+            child: Scaffold(
+              backgroundColor: Colors.black.withAlpha(100),
+              body: const Center(
+                child: CircularProgressIndicator(),
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
 
       final response = await repo.createReview(review, images);
 
       if (response == 401) {
         await authService.logout();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const LoginScreen(AddReviewWhereScreen()),
-          ),
-        );
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(AddReviewWhereScreen()),
+            ),
+          );
+        }
         return;
       }
 
       if (response != 200) {
-        Navigator.pop(context);
+        if (mounted) {
+          Navigator.pop(context);
+        }
         const snackBar = SnackBar(
           content: Text('Došlo je do pogreške.'),
           backgroundColor: Colors.red,
         );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
         return;
       } else {
         Future.delayed(const Duration(seconds: 2), () {
@@ -451,26 +459,28 @@ class _AddReviewContentScreenState extends State<AddReviewContentScreen> {
               (route) => false);
         });
 
-        showDialog(
-          context: context,
-          builder: (_) => const Material(
-            type: MaterialType.transparency,
-            child: Scaffold(
-              backgroundColor: Colors.blue,
-              body: Center(
-                child: Text(
-                  'WCenzija objavljena!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (_) => const Material(
+              type: MaterialType.transparency,
+              child: Scaffold(
+                backgroundColor: Colors.blue,
+                body: Center(
+                  child: Text(
+                    'WCenzija objavljena!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        );
+          );
+        }
       }
     }
   }

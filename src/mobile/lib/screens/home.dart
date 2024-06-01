@@ -101,12 +101,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () async {
                     final isAuthorized = await authService.isAuthorized();
                     if (!isAuthorized) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(HomeScreen()),
-                        ),
-                      );
+                      if (mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const LoginScreen(HomeScreen()),
+                          ),
+                        );
+                      }
                       return;
                     }
                     setState(() {
@@ -121,14 +124,16 @@ class _HomeScreenState extends State<HomeScreen> {
           child: const Icon(Icons.add),
           onPressed: () async {
             final isAuthorized = await authService.isAuthorized();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => isAuthorized
-                    ? const AddReviewWhereScreen()
-                    : const LoginScreen(AddReviewWhereScreen()),
-              ),
-            );
+            if (mounted) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => isAuthorized
+                      ? const AddReviewWhereScreen()
+                      : const LoginScreen(AddReviewWhereScreen()),
+                ),
+              );
+            }
           },
         ),
         body: _selectedScreen == 0 ? map() : ProfileScreen(),

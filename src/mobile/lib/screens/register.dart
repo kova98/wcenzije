@@ -34,7 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const Align(
               alignment: Alignment.topLeft,
               child: Text(
-                'Postani profi serator',
+                'Postani \nwcenzent',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 42,
@@ -172,7 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               builder: (context) =>
                                   LoginScreen(widget.redirect),
                             ),
-                          ), // TODO
+                          ),
                   ),
                 ],
               ),

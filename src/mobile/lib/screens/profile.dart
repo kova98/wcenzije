@@ -28,17 +28,24 @@ class ProfileScreen extends StatelessWidget {
       builder: (context, snapshot) {
         return snapshot.hasData
             ? Scaffold(
-                appBar: AppBar(title: Text(snapshot.data!.userName), actions: [
-                  IconButton(
-                      onPressed: () async {
-                        await _authService.logout();
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (_) => const HomeScreen()),
-                            (route) => false);
-                      },
-                      icon: const Icon(Icons.logout))
-                ]),
+                appBar: AppBar(
+                  title: Text(snapshot.data!.userName),
+                  actions: [
+                    IconButton(
+                        onPressed: () async {
+                          await _authService.logout();
+                          if (context.mounted) {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const HomeScreen(),
+                                ),
+                                (route) => false);
+                          }
+                        },
+                        icon: const Icon(Icons.logout))
+                  ],
+                ),
                 body: snapshot.data!.reviews.isEmpty
                     ? const Center(
                         child: Text(

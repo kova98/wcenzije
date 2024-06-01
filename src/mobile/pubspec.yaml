@@ -1,5 +1,5 @@
 name: wcenzije
-description: A new Flutter project.
+description: Public toilet reviews.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+7
+version: 1.1.0+9
 
 environment:
   sdk: ">=2.16.2 <3.0.0"
@@ -30,11 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
   http: ^0.13.4
-  dio: ^5.4.3+1
   google_maps_flutter: ^2.1.8
   carousel_slider: ^4.1.1
   google_place: ^0.4.7
@@ -50,10 +46,12 @@ dependencies:
   shared_preferences: ^2.0.15
   flutter_image_compress: ^2.3.0
   cached_network_image: ^3.2.3
+  collection: ^1.18.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  dependency_validator: any
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

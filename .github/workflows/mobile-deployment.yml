@@ -9,6 +9,10 @@ on:
 
 jobs:
   build:
+    defaults:
+      run:
+        working-directory: src/deploy
+        
     name: Build APK
     runs-on: ubuntu-latest
     steps:

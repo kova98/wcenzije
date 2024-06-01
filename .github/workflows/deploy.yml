@@ -1,4 +1,4 @@
-name: Backend Build
+name: Deploy Backend And Web Frontend
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /home/roko/wcenzije
+            pwd
             docker-compose pull
             docker-compose up -d
 

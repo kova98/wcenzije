@@ -30,14 +30,13 @@ class ReviewsScreen extends StatelessWidget {
         var reviews = snapshot.data!;
         return Scaffold(
           appBar: AppBar(title: Text(reviews[0].name)),
-          backgroundColor: Colors.blue,
           body: ListView.builder(
             itemCount: reviews.length,
             itemBuilder: (context, index) => InkWell(
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ReviewScreen(reviews[index].id),
+                  builder: (context) => ReviewScreen(review: reviews[index]),
                 ),
               ),
               child: Card(
@@ -49,7 +48,7 @@ class ReviewsScreen extends StatelessWidget {
                     children: [
                       Icon(
                         reviews[index].gender.icon(),
-                        color: Theme.of(context).primaryColorDark,
+                        color: Colors.blue,
                         size: 32,
                       ),
                     ],

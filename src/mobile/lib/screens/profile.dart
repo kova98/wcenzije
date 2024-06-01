@@ -53,7 +53,8 @@ class ProfileScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ReviewScreen(
-                                  snapshot.data!.reviews[index].id),
+                                reviewId: snapshot.data!.reviews[index].id,
+                              ),
                             ),
                           ),
                           child: Card(

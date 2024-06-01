@@ -10,9 +10,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:wcenzije/services/reviews_repo.dart';
 
 class ReviewScreen extends StatefulWidget {
-  final num reviewId;
+  final int reviewId;
+  final Review? review;
 
-  const ReviewScreen(this.reviewId, {Key? key}) : super(key: key);
+  const ReviewScreen({this.reviewId = 0, this.review, Key? key})
+      : super(key: key);
 
   @override
   State<ReviewScreen> createState() => _ReviewScreenState();
@@ -20,10 +22,15 @@ class ReviewScreen extends StatefulWidget {
 
 class _ReviewScreenState extends State<ReviewScreen> {
   final repo = ReviewsRepository();
+
   int _currentPage = 1;
-  late Review _review;
+
   @override
   Widget build(BuildContext context) {
+    if (widget.review != null) {
+      return reviewDisplay(widget.review!);
+    }
+
     return FutureBuilder<Review?>(
       future: repo.getReview(widget.reviewId),
       builder: (context, snapshot) {
@@ -47,49 +54,52 @@ class _ReviewScreenState extends State<ReviewScreen> {
             ),
           );
         }
-        _review = snapshot.data!;
 
-        return Scaffold(
-          backgroundColor: Colors.blue,
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: ListView(
-              children: [
-                navBar(),
-                const Padding(padding: EdgeInsets.all(8)),
-                title(),
-                const Padding(padding: EdgeInsets.all(8)),
-                ratingBar(),
-                Icon(_review.gender.icon(), color: Colors.white, size: 32),
-                const Padding(padding: EdgeInsets.all(8)),
-                nameAndDate(),
-                const Padding(padding: EdgeInsets.all(8)),
-                qualities(),
-                const Padding(padding: EdgeInsets.all(4)),
-                _review.imageUrls.isNotEmpty
-                    ? imageDisplay()
-                    : const SizedBox.shrink(),
-                const Padding(padding: EdgeInsets.all(4)),
-                contentTextField(),
-                const Padding(padding: EdgeInsets.all(8)),
-              ],
-            ),
-          ),
-        );
+        return reviewDisplay(snapshot.data!);
       },
     );
   }
 
-  Widget nameAndDate() {
+  Scaffold reviewDisplay(Review review) {
+    return Scaffold(
+      backgroundColor: Colors.blue,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: ListView(
+          children: [
+            navBar(),
+            const Padding(padding: EdgeInsets.all(8)),
+            title(review),
+            const Padding(padding: EdgeInsets.all(8)),
+            ratingBar(review),
+            Icon(review.gender.icon(), color: Colors.white, size: 32),
+            const Padding(padding: EdgeInsets.all(8)),
+            nameAndDate(review),
+            const Padding(padding: EdgeInsets.all(8)),
+            qualities(review),
+            const Padding(padding: EdgeInsets.all(4)),
+            review.imageUrls.isNotEmpty
+                ? imageDisplay(review)
+                : const SizedBox.shrink(),
+            const Padding(padding: EdgeInsets.all(4)),
+            contentTextField(review),
+            const Padding(padding: EdgeInsets.all(8)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget nameAndDate(Review review) {
     return Column(
       children: [
         Text(
-          (_review.author ?? "") != "" ? _review.author! : "anonimni korisnik",
+          (review.author ?? "") != "" ? review.author! : "anonimni korisnik",
           style: const TextStyle(color: Colors.white),
         ),
         const Padding(padding: EdgeInsets.all(2)),
         Text(
-          shortDate(_review.dateCreated),
+          shortDate(review.dateCreated),
           style: const TextStyle(color: Colors.white70),
         ),
       ],
@@ -100,24 +110,24 @@ class _ReviewScreenState extends State<ReviewScreen> {
     return Text(text, style: const TextStyle(color: Colors.white));
   }
 
-  Widget contentTextField() {
+  Widget contentTextField(Review review) {
     return Card(
       color: Colors.white,
       child: Padding(
           padding: const EdgeInsets.all(16),
           child: Text(
-            _review.content,
+            review.content,
             style: const TextStyle(fontSize: 16),
           )),
     );
   }
 
-  Widget title() {
+  Widget title(Review review) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Center(
         child: Text(
-          _review.name,
+          review.name,
           textAlign: TextAlign.center,
           style: const TextStyle(
             color: Colors.white,
@@ -154,7 +164,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     );
   }
 
-  Widget qualities() {
+  Widget qualities(Review review) {
     return Card(
       color: Colors.white,
       child: Padding(
@@ -163,25 +173,25 @@ class _ReviewScreenState extends State<ReviewScreen> {
           children: [
             quality(
               FontAwesomeIcons.hand,
-              _review.qualities.hasPaperTowels,
+              review.qualities.hasPaperTowels,
               "Ima papira za ruke!",
               "Nema papira za ruke.",
             ),
             quality(
               FontAwesomeIcons.toiletPaper,
-              _review.qualities.hasToiletPaper,
+              review.qualities.hasToiletPaper,
               "Ima WC papira!",
               "Nema WC papira.",
             ),
             quality(
               FontAwesomeIcons.soap,
-              _review.qualities.hasSoap,
+              review.qualities.hasSoap,
               "Ima sapuna!",
               "Nema sapuna.",
             ),
             quality(
               FontAwesomeIcons.broom,
-              _review.qualities.isClean,
+              review.qualities.isClean,
               "Čisto je!",
               "Prljavo je.",
             ),
@@ -191,7 +201,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     );
   }
 
-  Widget imageDisplay() {
+  Widget imageDisplay(Review review) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: ClipRRect(
@@ -211,12 +221,12 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 builder: (BuildContext context, int index) {
                   return PhotoViewGalleryPageOptions(
                     imageProvider:
-                        CachedNetworkImageProvider(_review.imageUrls[index]),
+                        CachedNetworkImageProvider(review.imageUrls[index]),
                     initialScale: PhotoViewComputedScale.covered * 0.95,
                     heroAttributes: PhotoViewHeroAttributes(tag: index),
                   );
                 },
-                itemCount: _review.imageUrls.length,
+                itemCount: review.imageUrls.length,
                 loadingBuilder: (context, event) => const Center(
                   child: CircularProgressIndicator(
                     color: Colors.white,
@@ -231,7 +241,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(3.0),
                       child: Text(
-                        '$_currentPage/${_review.imageUrls.length}',
+                        '$_currentPage/${review.imageUrls.length}',
                         style:
                             const TextStyle(color: Colors.white, fontSize: 12),
                       ),
@@ -250,7 +260,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
     );
   }
 
-  Widget ratingBar() {
+  Widget ratingBar(Review review) {
     return Center(
       child: Material(
         color: Colors.transparent,
@@ -262,7 +272,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
               RatingBar.builder(
                 ignoreGestures: true,
                 glowColor: Colors.amber,
-                initialRating: _review.rating / 2,
+                initialRating: review.rating / 2,
                 minRating: 0,
                 direction: Axis.horizontal,
                 allowHalfRating: true,

@@ -40,3 +40,4 @@ jobs:
                 exit 1
             else    
                 echo "All services are up and running"
+            fi

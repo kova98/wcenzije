@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd wcenzije
+            cd /home/roko/wcenzije
             docker-compose pull
             docker-compose up -d
 

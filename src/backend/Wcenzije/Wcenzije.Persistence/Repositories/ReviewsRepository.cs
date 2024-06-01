@@ -35,7 +35,7 @@ namespace Wcenzije.Persistence.Repositories
                 .FirstOrDefault();    
         }
 
-        public List<Review> GetReviews()
+        public List<Review> GetAllReviews()
         {
             return _context.Reviews
                 .Include(x => x.Qualities)
@@ -58,7 +58,7 @@ namespace Wcenzije.Persistence.Repositories
             _context.SaveChanges();
         }
         
-        public List<SimpleReview> GetReviewsSimple()
+        public List<SimpleReview> GetAllReviewsSimple()
         {
             return _context.Reviews
                 .Select(x => new SimpleReview
@@ -68,6 +68,32 @@ namespace Wcenzije.Persistence.Repositories
                     Location = x.Location,
                 })
                 .ToList();
+        }
+        
+        public PagedResult<Review> GetReviews(int page = 1, int pageSize = 10, List<long>? reviewIds = null)
+        {
+            var query = _context.Reviews
+                .Include(x => x.Qualities)
+                .OrderByDescending(x => x.DateCreated)
+                .AsQueryable();
+
+            if (reviewIds != null && reviewIds.Count != 0)
+            {
+                query = query.Where(x => reviewIds.Contains(x.Id));
+            }
+
+            var data = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            
+            return new PagedResult<Review>
+            {
+                Data = data,
+                Page = page,
+                PageSize = pageSize,
+                TotalCount = query.Count()
+            };
         }
         
         public void UpdateReview(Review review)

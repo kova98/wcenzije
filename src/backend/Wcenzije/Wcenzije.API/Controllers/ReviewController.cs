@@ -26,7 +26,7 @@ namespace Wcenzije.API.Controllers
         public IActionResult GetReviews()
         {
             var reviews = _reviewsRepo
-                .GetReviews()
+                .GetAllReviews()
                 .Where(LocationIsValid);
 
             foreach (var review in reviews)

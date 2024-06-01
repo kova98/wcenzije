@@ -1,0 +1,11 @@
+### GET Reviews V1
+GET http://localhost:7085/api/review
+
+### GET Reviews V2
+GET http://localhost:7085/api/v2/review
+
+### GET Reviews V2 with pagination
+GET http://localhost:7085/api/v2/review?page=1&limit=10
+
+### GET Reviews V2 by ids
+GET http://localhost:7085/api/v2/review/?ids=100,101,102

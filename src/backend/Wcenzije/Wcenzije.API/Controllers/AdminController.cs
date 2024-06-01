@@ -19,7 +19,7 @@ namespace Wcenzije.API.Controllers
         [HttpGet("review")]
         public IActionResult GetReviews()
         {
-            var reviews = _reviewsRepo.GetReviews();
+            var reviews = _reviewsRepo.GetAllReviews();
             return Ok(reviews);
         }
     }

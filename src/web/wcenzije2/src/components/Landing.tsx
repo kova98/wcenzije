@@ -3,7 +3,8 @@ import deviceArt from '../../public/device-art.png';
 import GooglePlayBadge from '@/components/GooglePlayBadge';
 import AppStoreBadge from '@/components/AppStoreBadge';
 import localFont from 'next/font/local';
-const gotham = localFont({ src: './gothamrnd_bold.otf' });
+
+const gotham = localFont({ src: '../../public/gothamrnd_bold.otf' });
 
 const messages = [
   'Osjećaš se stisnuto dok stišćeš?',
@@ -24,7 +25,7 @@ const getRandomMessage = () => {
   return messages[index];
 };
 
-export default function Hero() {
+export default function Landing() {
   return (
     <div
       className={`flex min-h-screen items-center justify-center bg-[#2196F3] text-white ${gotham.className}`}
@@ -39,7 +40,7 @@ export default function Hero() {
           </p>
           <div className="flex gap-6">
             <GooglePlayBadge />
-            <AppStoreBadge onClick={null} />
+            <AppStoreBadge />
           </div>
         </div>
         <div className="max-w-sm md:w-1/3">

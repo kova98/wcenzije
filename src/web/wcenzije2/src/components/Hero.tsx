@@ -32,7 +32,7 @@ export default function Hero() {
       <div className="flex flex-col items-center justify-center gap-10 text-center md:flex-row md:text-left">
         <div className="flex max-w-lg flex-col items-center px-5 md:items-start md:px-0">
           <h1 className="pt-20 text-6xl font-extrabold md:pt-0">
-            Papir je pregrub za tvoju finu guzu?
+            {getRandomMessage()}
           </h1>
           <p className="px-10 py-12 text-2xl text-blue-50 md:px-0">
             Reci to javno u WCenzije aplikaciji!

@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
+import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -21,8 +21,17 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useState } from 'react';
+import useToken from '@/lib/useToken';
 
 export default function ProfileForm() {
+  const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_ROOT_URL;
+  const endpoint = `${SERVER_URL}/api/auth/login`;
+
+  const { setToken } = useToken();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
   const formSchema = z.object({
     username: z.string().min(1, {
       message: 'Please enter your username.',
@@ -36,11 +45,28 @@ export default function ProfileForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: '',
+      password: '',
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    setError(null);
+    setLoading(true);
+    axios
+      .post(endpoint, { username: values.username, password: values.password })
+      .then(function (response) {
+        setToken(response.data.token);
+        setError(null);
+        setLoading(false);
+      })
+      .catch(function (error) {
+        if (error.response?.status === 401) {
+          setError('Ime ili lozinka su pogrešni.');
+        } else {
+          setError('Došlo je do greške.');
+        }
+        setLoading(false);
+      });
   }
 
   return (
@@ -78,7 +104,7 @@ export default function ProfileForm() {
                         <FormControl>
                           <Input {...field} type="password" />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage>{error}</FormMessage>
                       </FormItem>
                     )}
                   />
@@ -86,7 +112,9 @@ export default function ProfileForm() {
               </div>
             </CardContent>
             <CardFooter className="justify-end">
-              <Button type="submit">Submit</Button>
+              <Button disabled={loading} type="submit">
+                Submit
+              </Button>
             </CardFooter>
           </form>
         </Form>

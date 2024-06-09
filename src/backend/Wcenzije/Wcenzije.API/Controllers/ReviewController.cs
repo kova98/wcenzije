@@ -52,7 +52,17 @@ namespace Wcenzije.API.Controllers
         public IActionResult GetReview(long id)
         {
             var review = _reviewsRepo.GetReview(id);
-            return review == null ? NotFound() : Ok(review);
+            if (review == null)
+            {
+                return NotFound();
+            }
+            
+            if (review.IsAnonymous)
+            {
+                review.Author = null;
+            }
+            
+            return Ok(review);
         }
 
         [HttpPost]

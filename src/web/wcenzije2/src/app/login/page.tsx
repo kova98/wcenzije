@@ -23,21 +23,25 @@ import {
 } from '@/components/ui/card';
 import { useState } from 'react';
 import useToken from '@/lib/useToken';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function ProfileForm() {
   const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_ROOT_URL;
   const endpoint = `${SERVER_URL}/api/auth/login`;
-
   const { setToken } = useToken();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams?.get('redirect');
+  const router = useRouter();
 
   const formSchema = z.object({
     username: z.string().min(1, {
-      message: 'Please enter your username.',
+      message: 'Molim te upiši ime.',
     }),
     password: z.string().min(1, {
-      message: 'Please enter your password.',
+      message: 'Molim te upiši lozinku.',
     }),
   });
 
@@ -58,11 +62,15 @@ export default function ProfileForm() {
         setToken(response.data.token);
         setError(null);
         setLoading(false);
+        if (redirectUrl) {
+          router.push(redirectUrl);
+        }
       })
       .catch(function (error) {
         if (error.response?.status === 401) {
           setError('Ime ili lozinka su pogrešni.');
         } else {
+          console.log(error);
           setError('Došlo je do greške.');
         }
         setLoading(false);
@@ -85,7 +93,7 @@ export default function ProfileForm() {
                     name="username"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Username</FormLabel>
+                        <FormLabel>Ime</FormLabel>
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
@@ -100,7 +108,7 @@ export default function ProfileForm() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>Lozinka</FormLabel>
                         <FormControl>
                           <Input {...field} type="password" />
                         </FormControl>

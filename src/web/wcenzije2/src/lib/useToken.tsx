@@ -1,45 +1,34 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function useToken() {
-  const [isClient, setIsClient] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    setIsClient(true);
+    const tokenFromStorage = localStorage.getItem('token');
+    if (tokenFromStorage) {
+      setToken(tokenFromStorage);
+    }
   }, []);
-  const getToken = () => {
-    if (!isClient) {
-      return null;
-    }
 
-    const token = localStorage.getItem('token');
-    return token;
+  const saveTokenToLocalStorage = (newToken: string) => {
+    localStorage.setItem('token', newToken);
+    setToken(newToken);
   };
 
-  const [token, setToken] = useState(getToken());
-
-  const saveTokenToLocalStorage = (token: string) => {
-    if (!isClient) {
-      return null;
-    }
-
-    localStorage.setItem('token', token);
-    setToken(token);
+  const getTokenFromLocalStorage = () => {
+    return localStorage.getItem('token');
   };
 
-  const removeTokenFromLocalStorage = () => {
-    if (!isClient) {
-      return null;
-    }
-
+  const removeTokenFromPortalStorage = () => {
     localStorage.removeItem('token');
     setToken(null);
   };
 
   return {
     setToken: saveTokenToLocalStorage,
-    removeToken: removeTokenFromLocalStorage,
-    token,
+    removeToken: removeTokenFromPortalStorage,
+    getToken: getTokenFromLocalStorage,
   };
 }

@@ -83,7 +83,7 @@ export default function ProfileForm() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <CardHeader>
-              <CardTitle>Login</CardTitle>
+              <CardTitle>Prijava</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid w-full items-center">
@@ -120,7 +120,7 @@ export default function ProfileForm() {
               </div>
             </CardContent>
             <CardFooter className="justify-end">
-              <Button disabled={loading} type="submit">
+              <Button disabled={loading} type="submit" className="w-full">
                 Submit
               </Button>
             </CardFooter>

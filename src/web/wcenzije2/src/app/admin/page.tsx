@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import useToken from '@/lib/useToken';
+import ReviewsTable from '@/app/admin/reviews';
 
 export default function Admin() {
   const { getToken } = useToken();
@@ -15,5 +16,5 @@ export default function Admin() {
     }
   });
 
-  return <div>Admin</div>;
+  return <ReviewsTable></ReviewsTable>;
 }

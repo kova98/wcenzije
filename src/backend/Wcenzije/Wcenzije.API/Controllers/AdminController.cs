@@ -17,9 +17,9 @@ namespace Wcenzije.API.Controllers
         }
 
         [HttpGet("review")]
-        public IActionResult GetReviews()
+        public IActionResult GetReviews(int page = 1, int pageSize = 10, List<long>? reviewIds = null)
         {
-            var reviews = _reviewsRepo.GetAllReviews();
+            var reviews = _reviewsRepo.GetReviews(page, pageSize, reviewIds);
             return Ok(reviews);
         }
     }

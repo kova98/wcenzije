@@ -22,5 +22,12 @@ namespace Wcenzije.API.Controllers
             var reviews = _reviewsRepo.GetReviews(page, pageSize, reviewIds);
             return Ok(reviews);
         }
+        
+        [HttpDelete("review/{id}")]
+        public IActionResult DeleteReview(long id)
+        {
+            _reviewsRepo.DeleteReview(id);
+            return Ok();
+        }
     }
 }

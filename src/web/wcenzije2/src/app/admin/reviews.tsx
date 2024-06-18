@@ -40,6 +40,8 @@ import axios from 'axios';
 import { Gender, Review } from '@/lib/models';
 import useToken from '@/lib/useToken';
 import { date } from '@/lib/utils';
+import Link from 'next/link';
+import { toast } from '@/components/ui/use-toast';
 
 interface TableData {
   data: Review[];
@@ -50,7 +52,7 @@ interface TableData {
 
 export default function ReviewsTable() {
   const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_ROOT_URL;
-  const endpoint = `${SERVER_URL}/api/admin`;
+  const reviewEndpoint = `${SERVER_URL}/api/admin/review`;
   const [tableData, setTableData] = useState<TableData>({
     page: 1,
     data: [],
@@ -69,7 +71,7 @@ export default function ReviewsTable() {
           Authorization: `Bearer ${token}`,
         },
       };
-      const query = `${endpoint}/review?page=${tableData.page}`;
+      const query = `${reviewEndpoint}?page=${tableData.page}`;
 
       axios.get(query, config).then(
         (result) => {
@@ -100,6 +102,34 @@ export default function ReviewsTable() {
     if (!isLastPage()) {
       setTableData({ ...tableData, page: tableData.page + 1 });
     }
+  }
+
+  function deleteReview(id: number) {
+    const token = getToken();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    return () => {
+      axios.delete(`${reviewEndpoint}/${id}`, config).then(
+        (result) => {
+          setTableData({
+            ...tableData,
+            data: tableData.data.filter((item) => item.id !== id),
+          });
+          const item = tableData.data.find((item) => item.id === id)!;
+          toast({
+            title: 'Review deleted.',
+            description: `Review for ${item.name} by ${item.author} has been deleted successfully.`,
+          });
+        },
+        (error) => {
+          console.error(error);
+        },
+      );
+    };
   }
 
   return (
@@ -162,8 +192,14 @@ export default function ReviewsTable() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem>Edit</DropdownMenuItem>
-                      <DropdownMenuItem>Delete</DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Button
+                          variant="destructive"
+                          onClick={deleteReview(item.id)}
+                        >
+                          Delete
+                        </Button>
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

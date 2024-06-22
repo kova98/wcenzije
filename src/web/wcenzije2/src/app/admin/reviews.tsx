@@ -62,31 +62,27 @@ export default function ReviewsTable() {
   const { getToken } = useToken();
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const token = getToken();
 
-  const refreshData = () => {
-    useEffect(() => {
-      const token = getToken();
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const query = `${reviewEndpoint}?page=${tableData.page}`;
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const query = `${reviewEndpoint}?page=${tableData.page}`;
 
-      axios.get(query, config).then(
-        (result) => {
-          setIsLoaded(true);
-          setTableData(result.data as TableData);
-        },
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        },
-      );
-    }, [tableData.page]);
-  };
-
-  refreshData();
+    axios.get(query, config).then(
+      (result) => {
+        setIsLoaded(true);
+        setTableData((current) => ({ ...current, ...result.data }));
+      },
+      (error) => {
+        setIsLoaded(true);
+        setError(error);
+      },
+    );
+  }, [tableData.page, reviewEndpoint, token]);
 
   function previousPage() {
     if (tableData.page > 1) {

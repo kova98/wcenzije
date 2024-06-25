@@ -3,7 +3,7 @@ name: Build Web Frontend
 on:
   push:
     branches: ["main"]
-    paths: ["src/frontend**"]
+    paths: ["src/web**"]
   workflow_dispatch:
 
 jobs:

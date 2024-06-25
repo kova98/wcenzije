@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import deviceArt from '../../public/device-art.png';
+import deviceArt from '../../public/device-art.webp';
 import GooglePlayBadge from '@/components/GooglePlayBadge';
 import AppStoreBadge from '@/components/AppStoreBadge';
 import localFont from 'next/font/local';
@@ -44,11 +44,7 @@ export default function Landing() {
           </div>
         </div>
         <div className="max-w-sm md:w-1/3">
-          <Image
-            src={deviceArt}
-            alt="Picture of the app on a device"
-            objectFit="contain"
-          />
+          <Image src={deviceArt} alt="Picture of the app on a device" />
         </div>
       </div>
     </div>

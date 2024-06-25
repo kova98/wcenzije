@@ -6,29 +6,38 @@ export default function useToken() {
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const tokenFromStorage = localStorage.getItem('token');
-    if (tokenFromStorage) {
-      setToken(tokenFromStorage);
+    if (typeof window !== 'undefined') {
+      const tokenFromStorage = localStorage.getItem('token');
+      if (tokenFromStorage) {
+        setToken(tokenFromStorage);
+      }
     }
   }, []);
 
   const saveTokenToLocalStorage = (newToken: string) => {
-    localStorage.setItem('token', newToken);
-    setToken(newToken);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('token', newToken);
+      setToken(newToken);
+    }
   };
 
   const getTokenFromLocalStorage = () => {
-    return localStorage.getItem('token');
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('token');
+    }
+    return null;
   };
 
-  const removeTokenFromPortalStorage = () => {
-    localStorage.removeItem('token');
-    setToken(null);
+  const removeTokenFromLocalStorage = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+      setToken(null);
+    }
   };
 
   return {
     setToken: saveTokenToLocalStorage,
-    removeToken: removeTokenFromPortalStorage,
+    removeToken: removeTokenFromLocalStorage,
     getToken: getTokenFromLocalStorage,
   };
 }

@@ -21,12 +21,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import useToken from '@/lib/useToken';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 
-export default function ProfileForm() {
+function ProfileFormComponent() {
   const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_ROOT_URL;
   const endpoint = `${SERVER_URL}/api/auth/login`;
   const { setToken } = useToken();
@@ -128,5 +128,13 @@ export default function ProfileForm() {
         </Form>
       </Card>
     </div>
+  );
+}
+
+export default function ProfileForm() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProfileFormComponent />
+    </Suspense>
   );
 }

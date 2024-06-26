@@ -1,0 +1,19 @@
+### POST register
+POST http://localhost:7085/api/auth/register
+Content-Type: application/json
+
+{
+    "email": "test@mail.com",
+    "username": "testuser123",
+    "password": "testpassword123"
+}
+
+### POST login
+POST http://localhost:7085/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "testuser123",
+    "password": "testpassword123"
+}
+

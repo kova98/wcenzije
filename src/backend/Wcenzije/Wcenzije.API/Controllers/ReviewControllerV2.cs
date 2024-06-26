@@ -23,6 +23,15 @@ public class ReviewControllerV2 : ControllerBase
     {
         var reviews = _reviewsRepo.GetReviews(request.Page, request.PageSize, request.IdsArray.ToList());
         var response = new GetReviewsResponse(reviews);
+        
+        foreach (var review in response.Reviews)
+        {
+            if (review.IsAnonymous)
+            {
+                review.Author = null;
+            }
+        }
+        
         return Ok(response);
     }
     

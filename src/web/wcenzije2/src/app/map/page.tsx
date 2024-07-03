@@ -1,12 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import {
-  GoogleMap,
-  LoadScript,
-  Marker,
-  InfoWindow,
-} from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import axios from 'axios';
 
 interface Location {
@@ -51,6 +46,11 @@ export default function MapComponent() {
     return { lat, lng };
   }
 
+  const customIcon: google.maps.Icon = {
+    url: 'https://res.cloudinary.com/wcenzije/image/upload/v1720026324/marker.png',
+    scaledSize: new google.maps.Size(20, 20),
+  };
+
   return (
     <div className={'flex h-full w-1/2 flex-auto border-8'}>
       <LoadScript googleMapsApiKey="AIzaSyA58YfseNMaYTIGom5PglCb73FqyQCn62Y">
@@ -65,6 +65,7 @@ export default function MapComponent() {
               key={location.id}
               position={{ lat: location.lat, lng: location.lng }}
               onClick={() => setSelectedLocation(location)}
+              icon={customIcon}
             />
           ))}
         </GoogleMap>

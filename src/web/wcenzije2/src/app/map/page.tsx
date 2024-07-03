@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import axios from 'axios';
+import { mapStyles } from '@/app/map/map-styles';
 
 interface Location {
   id: number;
@@ -22,6 +23,7 @@ export default function MapComponent() {
     mapTypeControl: false,
     streetViewControl: false,
     zoomControl: false,
+    styles: mapStyles,
   };
 
   useEffect(() => {

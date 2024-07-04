@@ -23,7 +23,7 @@ Published on [Google Play](https://play.google.com/store/apps/details?id=com.kov
    
 ## Tech Stack
 **Mobile:** Flutter  
-**Backend:** .NET 8 
+**Backend:** .NET 8  
 **Web Frontend:** NextJS, Tailwind  
 **Persistence:** PostgreSQL, Cloudinary  
 **Infrastructure:** DigitalOcean, Nginx, Docker, Docker Compose  

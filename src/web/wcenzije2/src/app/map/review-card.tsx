@@ -59,10 +59,10 @@ export default function ReviewCard({
   }
 
   return (
-    <Card className="h-auto w-1/3 overflow-y-auto">
+    <Card className="relative h-auto w-1/3 overflow-y-auto">
       <Button
         onClick={() => setReview(undefined)}
-        className={'absolute right-10 top-10'}
+        className={'absolute right-1 top-1'}
         variant="ghost"
         size="icon"
       >
@@ -118,37 +118,39 @@ export default function ReviewCard({
         <Separator className={'my-5'} />
         <div className="pb-2 font-semibold">Osvrt</div>
         <p className={'text-muted-foreground'}>{selectedReview.content}</p>
-        <div className={'mt-5 flex items-center justify-center'}>
-          <Carousel className="aspect-square w-full">
-            <CarouselContent>
-              {selectedReview.imageUrls.map((url, index) => (
-                <CarouselItem key={index}>
-                  <div className="p-1">
-                    <Card className="h-full w-full overflow-hidden">
-                      <CardContent className="relative flex h-full w-full items-center justify-center p-0">
-                        <Badge
-                          className={
-                            'absolute right-2 top-2 bg-black text-white'
-                          }
-                        >
-                          {index + 1}/{selectedReview.imageUrls.length}
-                        </Badge>
-                        <Image
-                          className="h-auto w-full"
-                          src={url}
-                          width={300}
-                          height={300}
-                          sizes="100vw"
-                          alt={'Review image'}
-                        />
-                      </CardContent>
-                    </Card>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-        </div>
+        {selectedReview.imageUrls.length > 0 && (
+          <div className={'mt-5 flex items-center justify-center'}>
+            <Carousel className="aspect-square w-full">
+              <CarouselContent>
+                {selectedReview.imageUrls.map((url, index) => (
+                  <CarouselItem key={index}>
+                    <div className="p-1">
+                      <Card className="h-full w-full overflow-hidden">
+                        <CardContent className="relative flex h-full w-full items-center justify-center p-0">
+                          <Badge
+                            className={
+                              'absolute right-2 top-2 bg-black text-white'
+                            }
+                          >
+                            {index + 1}/{selectedReview.imageUrls.length}
+                          </Badge>
+                          <Image
+                            className="h-auto w-full"
+                            src={url}
+                            width={300}
+                            height={300}
+                            sizes="100vw"
+                            alt={'Review image'}
+                          />
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

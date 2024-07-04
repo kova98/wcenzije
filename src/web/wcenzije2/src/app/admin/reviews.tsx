@@ -29,7 +29,6 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -39,8 +38,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Gender, Review } from '@/lib/models';
 import useToken from '@/lib/useToken';
-import { date } from '@/lib/utils';
-import Link from 'next/link';
+import { dateTime } from '@/lib/utils';
 import { toast } from '@/components/ui/use-toast';
 
 interface TableData {
@@ -176,7 +174,7 @@ export default function ReviewsTable() {
                   {item.rating}
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
-                  {date(item.dateCreated)}
+                  {dateTime(item.dateCreated)}
                 </TableCell>
                 <TableCell>
                   <DropdownMenu>

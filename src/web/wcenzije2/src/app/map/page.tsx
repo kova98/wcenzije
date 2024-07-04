@@ -104,7 +104,12 @@ export default function MapComponent() {
           </GoogleMap>
         </LoadScript>
       </Card>
-      {selectedReview && <ReviewCard selectedReview={selectedReview} />}
+      {selectedReview && (
+        <ReviewCard
+          setReview={setSelectedReview}
+          selectedReview={selectedReview}
+        />
+      )}
     </div>
   );
 }

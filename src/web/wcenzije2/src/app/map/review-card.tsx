@@ -17,11 +17,14 @@ import Image from 'next/image';
 import React from 'react';
 import { Gender, Review } from '@/lib/models';
 import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 
 export default function ReviewCard({
   selectedReview,
+  setReview,
 }: {
   selectedReview: Review;
+  setReview: (review?: Review) => void;
 }) {
   function genderToString(gender: Gender) {
     switch (gender) {
@@ -57,6 +60,14 @@ export default function ReviewCard({
 
   return (
     <Card className="h-auto w-1/3 overflow-y-auto">
+      <Button
+        onClick={() => setReview(undefined)}
+        className={'absolute right-10 top-10'}
+        variant="ghost"
+        size="icon"
+      >
+        <X className="h-4 w-4" />
+      </Button>
       <CardHeader className="flex flex-col text-center">
         <CardTitle className="gap-2 text-3xl">{selectedReview.name}</CardTitle>
         <div className={'flex flex-row justify-center py-2'}>
@@ -75,7 +86,7 @@ export default function ReviewCard({
       </CardHeader>
 
       <CardContent className="flex flex-col p-6">
-        <div className="pb-2 font-semibold">Kvalitete</div>
+        <div className="pb-2 font-semibold">Osnove</div>
         <ul className="grid gap-3 text-sm text-muted-foreground">
           <li className="flex items-center justify-between gap-3">
             <span>

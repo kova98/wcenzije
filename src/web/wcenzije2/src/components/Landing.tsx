@@ -3,6 +3,8 @@ import deviceArt from '../../public/device-art.webp';
 import GooglePlayBadge from '@/components/GooglePlayBadge';
 import AppStoreBadge from '@/components/AppStoreBadge';
 import localFont from 'next/font/local';
+import Link from 'next/link';
+import React from 'react';
 
 const gotham = localFont({ src: '../../public/gothamrnd_bold.otf' });
 
@@ -42,6 +44,13 @@ export default function Landing() {
             <GooglePlayBadge />
             <AppStoreBadge />
           </div>
+          <p className={'pt-10 text-opacity-10'}>
+            Nisi na mobitelu? <span> </span>
+            <Link href={'/map'} className={'text-muted underline'}>
+              Pregledaj WC-e u browseru
+            </Link>
+            <a></a>
+          </p>
         </div>
         <div className="max-w-sm md:w-1/3">
           <Image src={deviceArt} alt="Picture of the app on a device" />

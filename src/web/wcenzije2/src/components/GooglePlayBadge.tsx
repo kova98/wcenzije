@@ -1,18 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import posthog from 'posthog-js';
 
 const GooglePlayBadge = () => {
-  function submitPhEvent() {
-    posthog.capture('google_play_badge_clicked');
-  }
-
   return (
-    <a
-      href="https://play.google.com/store/apps/details?id=com.kova98.wcenzije&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
-      onClick={submitPhEvent}
-    >
+    <a href="https://play.google.com/store/apps/details?id=com.kova98.wcenzije&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">
       <Image
         width={180}
         height={53}

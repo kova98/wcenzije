@@ -13,21 +13,12 @@ import {
 } from '@/components/ui/dialog';
 import Image from 'next/image';
 import Link from 'next/link';
-import posthog from 'posthog-js';
 
 const AppStoreBadge = () => {
-  function badgeClicked() {
-    posthog.capture('app_store_badge_clicked');
-  }
-
-  function buttonClicked() {
-    posthog.capture('app_store_badge_instagram_clicked');
-  }
-
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="hover:cursor-pointer" onClick={badgeClicked}>
+        <button className="hover:cursor-pointer">
           <Image
             width={160}
             height={53}
@@ -48,11 +39,7 @@ const AppStoreBadge = () => {
         </DialogHeader>
         <DialogFooter>
           <Button asChild>
-            <Link
-              href="https://www.instagram.com/wcenzije/"
-              target="_blank"
-              onClick={buttonClicked}
-            >
+            <Link href="https://www.instagram.com/wcenzije/" target="_blank">
               Prati nas na Instagramu
             </Link>
           </Button>

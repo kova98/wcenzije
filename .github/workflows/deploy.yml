@@ -19,8 +19,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd wcenzije
-            docker-compose pull
-            docker-compose up -d
+            docker compose pull
+            docker compose up -d
 
       - name: Check Health
         uses: appleboy/ssh-action@v1.0.0
